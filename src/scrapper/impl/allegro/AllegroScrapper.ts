@@ -44,6 +44,8 @@ export class AllegroScrapper extends ScrapperImpl {
         }
 
         link += `&p=${pageNumber}`;
+        // TODO: optional?
+        link += `&order=p` //list items in decreasing price order
         logger.debug(`Opening page at ${link}`);
         return link;
     }
@@ -113,7 +115,9 @@ export class AllegroScrapper extends ScrapperImpl {
         });
     }
 
-    private startScrapping() {
+    private async startScrapping() {
+        let totalItems: AllegroItem[] = []
+        let repeatCount = 0;
         const f = async () => {
             logger.debug("Allegro scrapper is starting");
 
@@ -133,10 +137,11 @@ export class AllegroScrapper extends ScrapperImpl {
                 await this.clickConsentButton(page);
 
                 const totalPages = await this.getTotalPages(page);
-                console.log("TOTAL PAGES: " + totalPages);
+                logger.info(`total pages: ${totalPages}`);
+                this.searchOptions!.maxPage ??= totalPages
 
                 let currentPage = this.searchOptions!.page;
-                const maxPage = totalPages + 1;
+                const maxPage = this.searchOptions!.maxPage + 1;
                 logger.debug(`Allegro scrapper will search on pages [${currentPage}, ${maxPage})`);
 
                 while (currentPage != maxPage) {
@@ -157,8 +162,9 @@ export class AllegroScrapper extends ScrapperImpl {
                         }
                     }
 
-                    let itemsStrObj = items.map(v => ({ ...v, attributes: v.attributes?.map(v => `${v.k} ${v.v}`) }));
-                    console.log(itemsStrObj);
+                    let itemsStrAttr = items.map(v => ({ ...v, attributes: v.attributes?.map(v => `${v.k} ${v.v}`) }));
+                    //console.log(itemsStrAttr);
+                    totalItems = totalItems.concat(items)
 
                     currentPage++;
                 }
@@ -169,10 +175,16 @@ export class AllegroScrapper extends ScrapperImpl {
             }
 
             await browser.close();
-            logger.debug(`Allegro scrapper finished. Next run in ${this.searchOptions!.interval} ms`);
-            this.interval = setTimeout(f, this.searchOptions!.interval);
+            repeatCount++;
+            if(this.searchOptions!.interval && (this.searchOptions?.maxRepeat ?? -1) != repeatCount){
+                logger.debug(`Allegro scrapper finished #${repeatCount}. Next run in ${this.searchOptions!.interval} ms`);
+                this.interval = setTimeout(f, this.searchOptions!.interval);
+            }else{
+                logger.debug(`Allegro scrapper finished`);
+            }
         };
-        return f();
+        await f();
+        logger.info(`Processed ${totalItems.length} items`)
     }
 
     async start(notificationsFacade: NotificationsFacade, argv?: any): Promise<void> {
