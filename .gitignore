@@ -1,0 +1,9 @@
+node_modules/
+dist/
+package-lock.json
+src/config/secrets/
+*-audit.json
+*.log
+logs
+tests/__tests__
+*.lock
