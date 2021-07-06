@@ -36,7 +36,7 @@ export default class Scrapper {
           fs.mkdirSync("outputs");
       }
       const now = new Date();
-      const dir = path.join("outputs",`${now.getDate()}-${now.getMonth()}-${now.getFullYear()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`);
+      const dir = path.join("outputs",`${now.getDate()}-${now.getMonth()+1}-${now.getFullYear()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`);
       fs.mkdirSync(dir)
       process.chdir(dir)
       logger.info(`Scraper ${scrapperType} starting in ${dir}`)
