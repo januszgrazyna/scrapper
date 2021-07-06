@@ -36,15 +36,15 @@ export default class Scrapper {
           fs.mkdirSync("outputs");
       }
       const now = new Date();
-      const dir = path.join("outputs",`${now.getDay()}_${now.getMonth()}_${now.getFullYear()}__${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}`);
+      const dir = path.join("outputs",`${now.getDate()}-${now.getMonth()}-${now.getFullYear()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`);
       fs.mkdirSync(dir)
       process.chdir(dir)
       logger.info(`Scraper ${scrapperType} starting in ${dir}`)
     }
 
     async start() {
+      configureScrapperLogger(this.options.type, this.options.debug);
       const impl = await this.loadImpl();
-      configureScrapperLogger(impl.scrapperType, this.options.debug);
       this.setOutputDir(impl.scrapperType);
       await impl.start(new NotificationsFacade(
         new FirebaseNotificationSender(),

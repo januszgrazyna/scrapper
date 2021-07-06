@@ -1,4 +1,5 @@
-import { INotificationSender, NotificationModel } from './NotificationSender';
+import { INotificationSender } from './NotificationSender';
+import { NotificationModel } from "./NotificationModel";
 import { INotificationsStorageService } from './NotificationsStorageService';
 
 export default class NotificationsFacade {

@@ -7,3 +7,4 @@ src/config/secrets/
 logs
 tests/__tests__
 *.lock
+outputs/

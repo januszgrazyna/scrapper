@@ -1,4 +1,4 @@
-import { NotificationModel } from "./NotificationSender";
+import { NotificationModel } from "./NotificationModel";
 
 
 

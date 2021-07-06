@@ -7,14 +7,15 @@ export class ScrapperImplLoader {
     }
 
     async load(name: string): Promise<ScrapperImpl> {
-        if (!name.endsWith("Scrapper")) {
-            name = name + "Scrapper";
+        let scrapperClass = name
+        if (!scrapperClass.endsWith("Scrapper")) {
+            scrapperClass = scrapperClass + "Scrapper";
         }
-        const path = `${this._modulesPath}/${name}`;
+        const path = `${this._modulesPath}/${name.toLowerCase()}/${scrapperClass}`;
 
         const imported = await import(path);
-        console.log(imported[name]);
+        console.log(imported[scrapperClass]);
 
-        return new imported[name];
+        return new imported[scrapperClass];
     }
 }

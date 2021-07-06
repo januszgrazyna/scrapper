@@ -1,4 +1,5 @@
-import { INotificationSender, NotificationModel } from "../NotificationSender";
+import { INotificationSender } from "../NotificationSender";
+import { NotificationModel } from "../NotificationModel";
 import { admin } from "../../firebase";
 
 export class FirebaseNotificationSender implements INotificationSender {

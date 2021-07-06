@@ -1,4 +1,5 @@
-import { INotificationSender, NotificationModel } from "../../notifications/NotificationSender";
+import { INotificationSender } from "../../notifications/NotificationSender";
+import { NotificationModel } from "../../notifications/NotificationModel";
 import NotificationsFacade from "../../notifications/NotificationsFacade";
 
 export function parseScrapperOptions<T>(type: string, argv: any){

@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@extra/humanize": "^4.2.1-next.613",
-    "automation-extra-plugin": "^4.2.1-next.587",
+    "automation-extra-plugin": "^4.2.2-next.616",
     "firebase": "^8.2.0",
     "firebase-admin": "^9.4.2",
     "puppeteer": "^10.1.0",

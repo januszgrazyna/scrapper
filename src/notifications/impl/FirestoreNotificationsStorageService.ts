@@ -1,4 +1,4 @@
-import { NotificationModel } from "../NotificationSender";
+import { NotificationModel } from "../NotificationModel";
 import { admin } from "../../firebase";
 import { INotificationsStorageService } from "../NotificationsStorageService";
 

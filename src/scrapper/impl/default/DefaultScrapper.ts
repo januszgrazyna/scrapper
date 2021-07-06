@@ -1,5 +1,5 @@
-import { NotificationModel } from "../../notifications/NotificationSender";
-import { ScrapperImpl } from "./ScrapperImpl";
+import { NotificationModel } from "../../../notifications/NotificationModel";
+import { ScrapperImpl } from "../ScrapperImpl";
 
 export class DefaultScrapper extends ScrapperImpl{
     constructor(){

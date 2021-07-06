@@ -1,34 +1,13 @@
-import { parseScrapperOptions, ScrapperImpl } from "./ScrapperImpl";
-import { logger } from '../../Logging';
-import * as p from 'puppeteer'
+import { parseScrapperOptions, ScrapperImpl } from "../ScrapperImpl";
+import { logger } from '../../../Logging';
+import * as p from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
-import { NotificationModel } from "../../notifications/NotificationSender";
-import NotificationsFacade from "../../notifications/NotificationsFacade";
+import { NotificationModel } from "../../../notifications/NotificationModel";
+import NotificationsFacade from "../../../notifications/NotificationsFacade";
 import HumanizePlugin from '@extra/humanize';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-
-interface AllegroItem {
-    buyNow?: boolean;
-    auction?: boolean;
-    advert?: boolean;
-    price?: number;
-    priceStr?: string;
-    title?: string;
-    attributes?: { k: string, v: string }[];
-    link?: string;
-}
-
-interface SearchOptions {
-    categoryUrlString: string;
-    searchTerm: string;
-    notificationExpr: string;
-    interval: number;
-    page?: number;
-    buyNow?: boolean;
-    auction?: boolean;
-    advert?: boolean;
-    priceFrom?: number;
-}
+import { AllegroItem } from "./AllegroItem";
+import { SearchOptions } from "./SearchOptions";
 
 
 export class AllegroScrapper extends ScrapperImpl {
@@ -37,7 +16,7 @@ export class AllegroScrapper extends ScrapperImpl {
     private notificationsFacade?: NotificationsFacade;
 
     constructor() {
-        super("Allegro")
+        super("Allegro");
     }
 
     buildAllegroLink(opt: SearchOptions, pageNumber: number): string {
@@ -65,17 +44,17 @@ export class AllegroScrapper extends ScrapperImpl {
         }
 
         link += `&p=${pageNumber}`;
-        logger.debug(`Opening page at ${link}`)
+        logger.debug(`Opening page at ${link}`);
         return link;
     }
 
-    enterItemsPage(opt: SearchOptions, page: p.Page, pageNumber: number): Promise<p.Response | null> {
+    enterItemsPage(opt: SearchOptions, page: p.Page, pageNumber: number): Promise<p.HTTPResponse | null> {
         const link = this.buildAllegroLink(opt, pageNumber);
         return page.goto(link);
     }
 
     clickConsentButton(page: p.Page): Promise<void> {
-        return page.click('button[data-role=accept-consent]');            
+        return page.click('button[data-role=accept-consent]');
     }
 
     getTotalPages(page: p.Page): Promise<number> {
@@ -121,7 +100,7 @@ export class AllegroScrapper extends ScrapperImpl {
 
                 for (const priceStr of prices) {
                     if (priceStr.match(/^[\d|,|\s]+zł$/)) {
-                        item.price = Number.parseFloat(priceStr.replace(/,/g, ".").replace(/\s/g, ""))
+                        item.price = Number.parseFloat(priceStr.replace(/,/g, ".").replace(/\s/g, ""));
                         item.priceStr = priceStr;
                         break;
                     }
@@ -137,15 +116,15 @@ export class AllegroScrapper extends ScrapperImpl {
     private startScrapping() {
         const f = async () => {
             logger.debug("Allegro scrapper is starting");
-            
-            puppeteer.use(StealthPlugin())
-            const browser = await puppeteer.launch({headless: true} as p.LaunchOptions);
+
+            puppeteer.use(StealthPlugin());
+            const browser = await puppeteer.launch({ headless: true } as p.LaunchOptions);
             HumanizePlugin({
-                mouse: {showCursor: true, enabled: true}
-            }).enable()
+                mouse: { showCursor: true, enabled: true }
+            }).enable();
             const page = await browser.newPage();
             page.setViewport({ width: 1900, height: 2000 });
-            
+
             try {
                 /* categoryUrlString: 'podzespoly-komputerowe-karty-graficzne-260019',
                 searchTerm: "rtx 2060", */
@@ -167,7 +146,7 @@ export class AllegroScrapper extends ScrapperImpl {
                     const items = await this.getAllegroItems(page);
 
                     for (const item of items) {
-                        if(eval(`(${this.searchOptions?.notificationExpr})`)){
+                        if (eval(`(${this.searchOptions?.notificationExpr})`)) {
 
                             const notification = new NotificationModel();
                             notification.title = '[Allegro] Found item with price: ' + item.price;
@@ -184,15 +163,15 @@ export class AllegroScrapper extends ScrapperImpl {
                     currentPage++;
                 }
             } catch (error) {
-                logger.error(error)
-                await page.screenshot({path: 'error.png'})
-                return
+                logger.error(error);
+                await page.screenshot({ path: 'error.png' });
+                return;
             }
 
             await browser.close();
             logger.debug(`Allegro scrapper finished. Next run in ${this.searchOptions!.interval} ms`);
             this.interval = setTimeout(f, this.searchOptions!.interval);
-        }
+        };
         return f();
     }
 
