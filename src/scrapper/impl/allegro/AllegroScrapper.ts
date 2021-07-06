@@ -1,6 +1,6 @@
 import { parseScrapperOptions, ScrapperImpl } from "../ScrapperImpl";
 import { logger } from '../../../Logging';
-import * as p from 'puppeteer';
+import { Page, HTTPResponse, LaunchOptions } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import { NotificationModel } from "../../../notifications/NotificationModel";
 import NotificationsFacade from "../../../notifications/NotificationsFacade";
@@ -8,6 +8,7 @@ import HumanizePlugin from '@extra/humanize';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { AllegroItem } from "./AllegroItem";
 import { SearchOptions } from "./SearchOptions";
+import { sleep } from "../../../utils";
 
 
 export class AllegroScrapper extends ScrapperImpl {
@@ -50,16 +51,17 @@ export class AllegroScrapper extends ScrapperImpl {
         return link;
     }
 
-    enterItemsPage(opt: SearchOptions, page: p.Page, pageNumber: number): Promise<p.HTTPResponse | null> {
+    enterItemsPage(opt: SearchOptions, page: Page, pageNumber: number): Promise<HTTPResponse | null> {
         const link = this.buildAllegroLink(opt, pageNumber);
         return page.goto(link);
     }
 
-    clickConsentButton(page: p.Page): Promise<void> {
+    clickConsentButton(page: Page): Promise<void> {
+        logger.debug('Clicking consent')
         return page.click('button[data-role=accept-consent]');
     }
 
-    getTotalPages(page: p.Page): Promise<number> {
+    getTotalPages(page: Page): Promise<number> {
         return page.evaluate(() => {
             const totalArr = Array.from(document.querySelectorAll("div a[name='pagination-bottom']+div input")).map(v => v.attributes).filter(v => v.hasOwnProperty("data-maxpage")).map((v: NamedNodeMap) => v.getNamedItem("data-maxpage")?.value);
             if (totalArr.length > 0) {
@@ -70,7 +72,7 @@ export class AllegroScrapper extends ScrapperImpl {
         });
     }
 
-    getAllegroItems(page: p.Page): Promise<AllegroItem[]> {
+    getAllegroItems(page: Page): Promise<AllegroItem[]> {
         return page.evaluate(() => {
 
             const items = [];
@@ -115,6 +117,12 @@ export class AllegroScrapper extends ScrapperImpl {
         });
     }
 
+    private async randomSleep(){
+        const randomSleep = Math.floor(Math.random() * 10000) + 3500
+        logger.debug(`Starting random sleep for ${randomSleep} ms`)
+        await sleep(randomSleep)
+    }
+
     private async startScrapping() {
         let totalItems: AllegroItem[] = []
         let repeatCount = 0;
@@ -122,18 +130,26 @@ export class AllegroScrapper extends ScrapperImpl {
             logger.debug("Allegro scrapper is starting");
 
             puppeteer.use(StealthPlugin());
-            const browser = await puppeteer.launch({ headless: true } as p.LaunchOptions);
+            const browser = await puppeteer.launch({ headless: false, args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-infobars',
+                '--window-position=0,0',
+                '--ignore-certifcate-errors',
+                '--ignore-certifcate-errors-spki-list'
+            ] } as LaunchOptions);
             HumanizePlugin({
                 mouse: { showCursor: true, enabled: true }
             }).enable();
-            const page = await browser.newPage();
-            page.setViewport({ width: 1900, height: 2000 });
+            const page = (await browser.pages())[0];
+            page.setViewport({ width: 1366, height: 768 });
 
             try {
                 /* categoryUrlString: 'podzespoly-komputerowe-karty-graficzne-260019',
                 searchTerm: "rtx 2060", */
                 this.searchOptions!.page ??= 1;
                 await this.enterItemsPage(this.searchOptions!, page, this.searchOptions!.page);
+                await this.randomSleep()
                 await this.clickConsentButton(page);
 
                 const totalPages = await this.getTotalPages(page);
@@ -146,10 +162,11 @@ export class AllegroScrapper extends ScrapperImpl {
 
                 while (currentPage != maxPage) {
                     if (this.searchOptions!.page != currentPage) {
+                        await this.randomSleep()
                         await this.enterItemsPage(this.searchOptions!, page, currentPage);
                     }
                     const items = await this.getAllegroItems(page);
-
+                    
                     for (const item of items) {
                         if (eval(`(${this.searchOptions?.notificationExpr})`)) {
 
