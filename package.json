@@ -6,16 +6,16 @@
   "scripts": {
     "test": "jest",
     "build-dev": "tsc",
-    "build": "tsc && cp package.json ./dist && rm -r ./dist/__tests__ && (cd dist && npm install --production)",
+    "build": "tsc && cp package.json ./dist && rm -r ./dist/__tests__ && (cd dist && yarn install --production --force)",
     "start": "node index.js",
     "start-dev": "node ./dist/index.js",
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@extra/humanize": "^4.2.1-next.613",
     "automation-extra-plugin": "^4.2.2-next.616",
-    "firebase": "^8.2.0",
-    "firebase-admin": "^9.4.2",
+    "@extra/humanize": "^4.2.2-next.616",
+    "firebase": "^8.7.1",
+    "firebase-admin": "^9.10.0",
     "puppeteer": "^10.1.0",
     "puppeteer-extra": "^3.1.18",
     "puppeteer-extra-plugin-stealth": "^2.7.8",
