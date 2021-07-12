@@ -16,6 +16,7 @@ export class AllegroScrapper extends ScrapperImpl {
     private interval: any;
     private searchOptions?: SearchOptions;
     private notificationsFacade?: NotificationsFacade;
+    private scrapperRun?: ScrapperRun;
 
     constructor() {
         super("Allegro");
@@ -144,7 +145,8 @@ export class AllegroScrapper extends ScrapperImpl {
             }).enable();
             const page = (await browser.pages())[0];
             page.setViewport({ width: 1366, height: 768 });
-
+            
+            const notificationsToSend: NotificationModel[] = []
             try {
                 /* categoryUrlString: 'podzespoly-komputerowe-karty-graficzne-260019',
                 searchTerm: "rtx 2060", */
@@ -171,12 +173,11 @@ export class AllegroScrapper extends ScrapperImpl {
                     for (const item of items) {
                         if (eval(`(${this.searchOptions?.notificationExpr})`)) {
 
-                            const notification = new NotificationModel();
+                            const notification = new NotificationModel(this.scrapperRun?.id!);
                             notification.title = '[Allegro] Found item with price: ' + item.price;
                             notification.body = item.title!;
                             notification.url = item.link!;
-
-                            await this.notificationsFacade?.sendNotification(notification);
+                            notificationsToSend.push(notification)
                         }
                     }
 
@@ -189,7 +190,11 @@ export class AllegroScrapper extends ScrapperImpl {
             } catch (error) {
                 logger.error(error);
                 await page.screenshot({ path: 'error.png' });
+                await browser.close();
                 return;
+            }
+            finally{
+                await this.notificationsFacade?.sendNotifications(notificationsToSend);
             }
 
             await browser.close();
@@ -208,6 +213,7 @@ export class AllegroScrapper extends ScrapperImpl {
     async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperRun, argv?: any): Promise<void> {
         this.searchOptions = parseScrapperOptions<SearchOptions>("allegro", argv);
         this.notificationsFacade = notificationsFacade;
+        this.scrapperRun = scrapperRun;
         await this.startScrapping();
     }
 

@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { ScrapperRunId } from '../scrapper/ScrapperRun';
 
 
 export class NotificationModel {
@@ -12,14 +13,20 @@ export class NotificationModel {
     options?: string;
 
     static fromLiteral(obj: Partial<NotificationModel>): NotificationModel {
-        const newObj = new NotificationModel();
+        const newObj = new NotificationModel(obj.scrapperRunId!);
         const o = Object.assign(newObj, obj);
         return o;
     }
 
-    constructor() {
+    constructor(
+        public scrapperRunId: ScrapperRunId
+    ) {
         this._dateCreated = new Date();
         this._id = uuidv4();
+
+        if(!this.scrapperRunId){
+            throw new Error("Scrapper run id null or undefined")
+        }
     }
 
     get id(): string {

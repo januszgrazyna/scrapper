@@ -1,8 +1,10 @@
 
+export type ScrapperRunId = string;
+
 export class ScrapperRun{
     
-    public id: string;
-    public dateCreated: Date;
+    public readonly id: ScrapperRunId;
+    public readonly dateCreated: Date;
     public outputDirectory?: string;
 
     private _results : any;

@@ -6,7 +6,7 @@ import { clearFirestoreCollection } from "./utils/firestoreTestUtils";
 
 test('', async () => {
     const service = new FirestoreNotificationsStorageService();
-    const notification = new NotificationModel();
+    const notification = new NotificationModel("id");
     notification.assignnotificationIdentifier('id1');
     await service.addNotification(notification);
 

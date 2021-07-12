@@ -14,8 +14,14 @@ function configureScrapperLogger(scrapperType: string, debug: boolean) {
   }))
 }
 
+function __configureTestLogger(){
+  logger.add(new winston.transports.Console({
+    format: winston.format.simple(), level: 'debug',
+  }));
+}
+
 function stopLogger() {
   logger.end()
 }
 
-export { logger, configureScrapperLogger, stopLogger };
+export { logger, configureScrapperLogger, __configureTestLogger, stopLogger };
