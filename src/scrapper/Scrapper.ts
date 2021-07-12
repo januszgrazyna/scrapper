@@ -8,6 +8,7 @@ import { ScrapperOptions } from './ScrapperOptions';
 import * as fs from "fs";
 import * as path from "path";
 import { IResultsUpload } from '../outputUpload/IResultsUpload';
+import { ScrapperRun } from './ScrapperRun';
 
 
 
@@ -34,12 +35,11 @@ export default class Scrapper {
     }
 
     
-    private setOutputDir(scrapperType: string){
+    private setOutputDir(scrapperType: string, scrapperRun: ScrapperRun){
       if(!fs.existsSync("outputs")){
           fs.mkdirSync("outputs");
       }
-      const now = new Date();
-      const dir = this.outputDir = path.join(process.cwd(), "outputs",`${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`);
+      const dir = this.outputDir = path.join(process.cwd(), "outputs", scrapperRun.id);
       fs.mkdirSync(dir)
       process.chdir(dir)
       logger.info(`Scraper ${scrapperType} starting in ${dir}`)
@@ -47,17 +47,21 @@ export default class Scrapper {
 
     async start() {
       configureScrapperLogger(this.options.type, this.options.debug);
+      const scrapperRun = new ScrapperRun()
       const impl = await this.loadImpl();
-      this.setOutputDir(impl.scrapperType);
+      this.setOutputDir(impl.scrapperType, scrapperRun);
       logger.info(`Scrapper ${impl.scrapperType} starting in ${this.outputDir} directory`)
       const results = await impl.start(new NotificationsFacade(
         new FirebaseNotificationSender(),
         new FirestoreNotificationsStorageService(),
         impl.notificationIdentifierFactory,
-      ),
-      this.argv);
+      ), scrapperRun, this.argv);
+      scrapperRun.results = results;
+      scrapperRun.outputDirectory = this.outputDir!;
+      scrapperRun.ensureValid();
+
       logger.on('finish', async () => {
-        setTimeout(async () => await this.resultsUpload.uploadResults(this.outputDir!, results), 5000)
+        setTimeout(async () => await this.resultsUpload.uploadResults(scrapperRun), 5000)
       })
       stopLogger()
 

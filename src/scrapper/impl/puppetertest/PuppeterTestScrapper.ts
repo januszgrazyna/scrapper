@@ -7,6 +7,7 @@ import { NotificationModel } from "../../../notifications/NotificationModel";
 import NotificationsFacade from "../../../notifications/NotificationsFacade";
 import HumanizePlugin from '@extra/humanize';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import { ScrapperRun } from "../../ScrapperRun";
 
 
 export class PuppeterTestScrapper extends ScrapperImpl {
@@ -38,7 +39,7 @@ export class PuppeterTestScrapper extends ScrapperImpl {
         await page.goto("http://127.0.0.1:8080/index.html")
     }
 
-    async start(notificationsFacade: NotificationsFacade, argv?: any): Promise<any> {
+    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperRun, argv?: any): Promise<any> {
         this.notificationsFacade = notificationsFacade;
         await this.startScrapping();
     }

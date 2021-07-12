@@ -3,21 +3,23 @@ import * as fs from "fs";
 import { deepStrictEqual } from "assert";
 import { admin } from "../firebase";
 import * as path from "path";
+import { ScrapperRun } from "../scrapper/ScrapperRun";
 
 export class FirebaseResultsUpload implements IResultsUpload {
-    async uploadResults(outputDirectory: string, results: any): Promise<void> {
-        if(!fs.existsSync(outputDirectory)){
-            throw new Error(`Output directory ${outputDirectory} doesn't exist`);
+    async uploadResults(scrapperRun: ScrapperRun): Promise<void> {
+        if(!fs.existsSync(scrapperRun.outputDirectory!)){
+            throw new Error(`Output directory ${scrapperRun.outputDirectory!} doesn't exist`);
         }
-        const outputDirRelative = outputDirectory.split(path.sep).slice(-2).reduce((acc, x) => path.join(acc, x), "")
-        const files = fs.readdirSync(outputDirectory);
+        const outputDirRelative = scrapperRun.outputDirectory!.split(path.sep).slice(-2).reduce((acc, x) => path.join(acc, x), "")
+        const files = fs.readdirSync(scrapperRun.outputDirectory!);
         var bucket = admin.storage().bucket();
         const runs = admin.firestore().collection("runs");
-        console.log(`Sending ${files.length} files from ${outputDirectory} into ${outputDirRelative}`)
+        console.log(`Sending ${files.length} files from ${scrapperRun.outputDirectory} into ${outputDirRelative}`)
         for (const file of files) {            
             await bucket.upload(file, {destination: path.join(outputDirRelative, path.basename(file))})
         }
-        await runs.doc(outputDirRelative.split(path.sep).slice(-1)[0]).set({
+        await runs.doc(scrapperRun.id).set({
+            ...scrapperRun
         })
     }
 

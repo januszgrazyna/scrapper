@@ -9,6 +9,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { AllegroItem } from "./AllegroItem";
 import { SearchOptions } from "./SearchOptions";
 import { sleep } from "../../../utils";
+import { ScrapperRun } from "../../ScrapperRun";
 
 
 export class AllegroScrapper extends ScrapperImpl {
@@ -204,7 +205,7 @@ export class AllegroScrapper extends ScrapperImpl {
         logger.info(`Processed ${totalItems.length} items`)
     }
 
-    async start(notificationsFacade: NotificationsFacade, argv?: any): Promise<void> {
+    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperRun, argv?: any): Promise<void> {
         this.searchOptions = parseScrapperOptions<SearchOptions>("allegro", argv);
         this.notificationsFacade = notificationsFacade;
         await this.startScrapping();
