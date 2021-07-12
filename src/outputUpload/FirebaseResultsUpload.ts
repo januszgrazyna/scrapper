@@ -1,11 +1,11 @@
-import { IOutputUpload } from "./IOutputUpload";
+import { IResultsUpload } from "./IResultsUpload";
 import * as fs from "fs";
 import { deepStrictEqual } from "assert";
 import { admin } from "../firebase";
 import * as path from "path";
 
-export class FirebaseOutputUpload implements IOutputUpload {
-    async uploadOutputFolder(outputDirectory: string): Promise<void> {
+export class FirebaseResultsUpload implements IResultsUpload {
+    async uploadResults(outputDirectory: string, results: any): Promise<void> {
         if(!fs.existsSync(outputDirectory)){
             throw new Error(`Output directory ${outputDirectory} doesn't exist`);
         }

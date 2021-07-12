@@ -20,5 +20,5 @@ export abstract class ScrapperImpl{
     }
 
     abstract notificationIdentifierFactory(model: NotificationModel): string;
-    abstract start(notificationsFacade: NotificationsFacade, argv?: any): Promise<void>;
+    abstract start(notificationsFacade: NotificationsFacade, argv?: any): Promise<any>;
 }
