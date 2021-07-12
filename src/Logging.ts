@@ -15,6 +15,7 @@ function configureScrapperLogger(scrapperType: string, debug: boolean) {
 }
 
 function stopLogger() {
+  logger.end()
 }
 
 export { logger, configureScrapperLogger, stopLogger };
