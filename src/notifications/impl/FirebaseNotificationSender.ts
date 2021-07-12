@@ -5,13 +5,15 @@ import { admin } from "../../firebase";
 export class FirebaseNotificationSender implements INotificationSender {
     static topic = "scrapper";
 
-    async sendNotification(options: NotificationModel): Promise<any> {
+    async sendNotification(model: NotificationModel): Promise<any> {
         var message: admin.messaging.Message = {
             data: {
-                title: options.title,
-                body: options.body,
-                url: options.url ?? "",
-                options: NotificationModel.stringifiedOptions(options.options),
+                title: model.title,
+                body: model.body,
+                url: model.url ?? "",
+                id: model.id,
+                scrapperRunId: model.scrapperRunId,
+                options: NotificationModel.stringifiedOptions(model.options),
             },
             topic: FirebaseNotificationSender.topic
         };
