@@ -7,22 +7,30 @@ export class NotificationModel {
     private _dateCreated: Date;
     private _notificationIdentifier: string = null!;
 
-    title: string = null!;
-    body: string = null!;
+    title: string;
+    body: string;
     url?: string;
     options?: string;
 
     static fromLiteral(obj: Partial<NotificationModel>): NotificationModel {
-        const newObj = new NotificationModel(obj.scrapperRunId!);
+        const newObj = new NotificationModel(obj.scrapperRunId!, obj.title!, obj.body!);
         const o = Object.assign(newObj, obj);
         return o;
     }
 
     constructor(
-        public scrapperRunId: ScrapperRunId
+        public scrapperRunId: ScrapperRunId, title: string, body: string
     ) {
         this._dateCreated = new Date();
         this._id = uuidv4();
+        if(!title){
+            throw new Error("Title cannot be undefined/null")
+        }
+        this.title = title;
+        if(!body){
+            throw new Error("Body cannot be undefined/null")
+        }
+        this.body = body;
 
         if(!this.scrapperRunId){
             throw new Error("Scrapper run id null or undefined")

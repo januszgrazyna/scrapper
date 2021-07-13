@@ -8,7 +8,13 @@ export class FirestoreNotificationsStorageService implements INotificationsStora
     addNotification(notification: NotificationModel): Promise<any> {
         const notifications = admin.firestore().collection("notifications");
         const { id, ...notificationData } = notification;
-        return notifications.doc(notification.id).set(notificationData);
+        const data = notificationData as any;
+        for (const key in data) {
+            if (Object.prototype.hasOwnProperty.call(notificationData, key) && data[key] instanceof Date) {
+                data[key] = data[key].toJSON()
+            }
+        }
+        return notifications.doc(notification.id).set(data);
     }
     deleteNotification(id: any): Promise<any> {
         const notifications = admin.firestore().collection("notifications");

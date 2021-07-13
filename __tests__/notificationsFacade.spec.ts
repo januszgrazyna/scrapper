@@ -13,7 +13,7 @@ afterAll(async () => {
 test('', async () => {
     __configureTestLogger();
     const service = new FirestoreNotificationsStorageService();
-    const notification = new NotificationModel("id");
+    const notification = new NotificationModel("id", "title", "body");
     notification.title = "test";
     notification.body = "message test";
 
