@@ -10,6 +10,7 @@ export async function start(opt: ScrapperOptions = new ScrapperOptions(), argv: 
         await scrapper.start();        
     } catch (error) {
         logger.error(`Error raised while running scrapper: ${error}`)
+        logger.error(`${error.stack}`)
     }
     stopLogger();
 }
