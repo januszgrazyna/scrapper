@@ -1,11 +1,14 @@
+import { ScrapperImpl } from "./impl/ScrapperImpl";
 
 export type ScrapperRunId = string;
 
 export class ScrapperRun{
     
     public readonly id: ScrapperRunId;
+    public readonly implId: string;
     public readonly dateCreated: Date;
     public outputDirectory?: string;
+    
 
     private _results : any;
     public get results() : any {
@@ -17,14 +20,16 @@ export class ScrapperRun{
     }
 
     constructor(
+        impl: ScrapperImpl
     ){
         const now = new Date();
         this.id = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`;
         this.dateCreated = now;
+        this.implId = impl.implId;
     }
 
     public ensureValid(){
-        if(this.results !== undefined || this.outputDirectory == null){
+        if(this.results === undefined || this.outputDirectory == null){
             throw new Error("ScrapperRun instance is not valid")
         } 
     }

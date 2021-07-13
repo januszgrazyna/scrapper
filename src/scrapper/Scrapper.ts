@@ -47,10 +47,10 @@ export default class Scrapper {
 
     async start() {
       configureScrapperLogger(this.options.type, this.options.debug);
-      const scrapperRun = new ScrapperRun()
       const impl = await this.loadImpl();
-      this.setOutputDir(impl.scrapperType, scrapperRun);
-      logger.info(`Scrapper ${impl.scrapperType} starting in ${this.outputDir} directory`)
+      const scrapperRun = new ScrapperRun(impl)
+      this.setOutputDir(impl.implId, scrapperRun);
+      logger.info(`Scrapper ${impl.implId} starting in ${this.outputDir} directory`)
       const results = await impl.start(new NotificationsFacade(
         new FirebaseNotificationSender(),
         new FirestoreNotificationsStorageService(),
