@@ -2,37 +2,27 @@ import firebase from 'firebase';
 import admin from 'firebase-admin';
 import * as fs from 'fs';
 
-function firebaseStorage() {
-  if(fs.existsSync('./config/secrets/firebaseStorage.json')){
-    return JSON.parse(fs.readFileSync('./config/secrets/firebaseStorage.json', "utf-8"))
+function __readFromFileOrEnvVar(filepath: string, envVarName: string){
+  if(fs.existsSync(filepath)){
+    return JSON.parse(fs.readFileSync(filepath, "utf-8"))
   }
-  const envVar = process.env["FIREBASE_STORAGE"]
+  const envVar = process.env[envVarName]
   if(!envVar){
-    throw new Error("Cannot find FIREBASE_STORAGE variable")
+    throw new Error(`Cannot find ${envVarName} variable`)
   }
   return JSON.parse(envVar.toString())
+}
+
+function firebaseStorage() {
+  return __readFromFileOrEnvVar('./src/config/secrets/firebaseStorage.json', "FIREBASE_STORAGE")
 }
 
 function firebaseConfig() {
-  if(fs.existsSync('./config/secrets/firebase.json')){
-    return JSON.parse(fs.readFileSync('./config/secrets/firebase.json', "utf-8"))
-  }
-  const envVar = process.env["FIREBASE_CONFIG"]
-  if(!envVar){
-    throw new Error("Cannot find FIREBASE_CONFIG variable")
-  }
-  return JSON.parse(envVar.toString())
+  return __readFromFileOrEnvVar('./src/config/secrets/firebase.json', "FIREBASE_CONFIG")
 }
 
 function serviceAccount(): any {
-  if(fs.existsSync('./config/secrets/serviceAccountKey.json')){
-    return JSON.parse(fs.readFileSync('./config/secrets/serviceAccountKey.json', "utf-8"))
-  }
-  const envVar = process.env["SERVICE_ACCOUNT"]
-  if(!envVar){
-    throw new Error("Cannot find SERVICE_ACCOUNT variable")
-  }
-  return JSON.parse(envVar.toString())
+  return __readFromFileOrEnvVar('./src/config/secrets/serviceAccountKey.json', "SERVICE_ACCOUNT")
 }
 
 

@@ -1,4 +1,4 @@
-import { parseScrapperOptions } from '../src/scrapper/impl/ScrapperImpl';
+import { parseScrapperOptions } from '../src/scrapper/ScrapperImpl';
 
 test('Options parser test', () => {
   interface Opt {
