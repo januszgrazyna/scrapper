@@ -1,4 +1,4 @@
-export interface AllegroItem {
+export interface Item {
     buyNow?: boolean;
     auction?: boolean;
     advert?: boolean;

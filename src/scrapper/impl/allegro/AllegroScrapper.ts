@@ -1,4 +1,4 @@
-import { parseScrapperOptions, ScrapperImpl } from "../ScrapperImpl";
+import { parseScrapperOptions, ScrapperImpl } from "../../ScrapperImpl";
 import { logger } from '../../../Logging';
 import { Page, HTTPResponse, LaunchOptions } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
@@ -6,7 +6,7 @@ import { NotificationModel } from "../../../notifications/NotificationModel";
 import NotificationsFacade from "../../../notifications/NotificationsFacade";
 import HumanizePlugin from '@extra/humanize';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import { AllegroItem } from "./AllegroItem";
+import { Item } from "./Item";
 import { SearchOptions } from "./SearchOptions";
 import { sleep } from "../../../utils";
 import { ScrapperRun } from "../../ScrapperRun";
@@ -74,12 +74,12 @@ export class AllegroScrapper extends ScrapperImpl {
         });
     }
 
-    getAllegroItems(page: Page): Promise<AllegroItem[]> {
+    getAllegroItems(page: Page): Promise<Item[]> {
         return page.evaluate(() => {
 
             const items = [];
             for (const article of Array.from(document.querySelectorAll("div[data-box-name='items container'] article"))) {
-                const item: AllegroItem = {};
+                const item: Item = {};
 
                 item.auction = article.textContent?.indexOf("LICYTACJA") != -1;
                 item.advert = article.textContent?.indexOf("OGŁOSZENIE") != -1;
@@ -126,7 +126,7 @@ export class AllegroScrapper extends ScrapperImpl {
     }
 
     private async startScrapping() {
-        let totalItems: AllegroItem[] = []
+        let totalItems: Item[] = []
         let repeatCount = 0;
         const f = async () => {
             logger.debug("Allegro scrapper is starting");

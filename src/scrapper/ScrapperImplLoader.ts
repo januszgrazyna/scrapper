@@ -1,4 +1,4 @@
-import { ScrapperImpl } from "./impl/ScrapperImpl";
+import { ScrapperImpl } from "./ScrapperImpl";
 
 export class ScrapperImplLoader {
     private _modulesPath: string;

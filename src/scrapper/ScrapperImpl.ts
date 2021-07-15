@@ -1,7 +1,7 @@
-import { INotificationSender } from "../../notifications/NotificationSender";
-import { NotificationModel } from "../../notifications/NotificationModel";
-import NotificationsFacade from "../../notifications/NotificationsFacade";
-import { ScrapperRun } from "../ScrapperRun";
+import { INotificationSender } from "../notifications/NotificationSender";
+import { NotificationModel } from "../notifications/NotificationModel";
+import NotificationsFacade from "../notifications/NotificationsFacade";
+import { ScrapperRun } from "./ScrapperRun";
 
 export function parseScrapperOptions<T>(type: string, argv: any){
     const opt: any = {};    

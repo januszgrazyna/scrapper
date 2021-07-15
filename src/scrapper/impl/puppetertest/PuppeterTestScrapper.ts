@@ -1,4 +1,4 @@
-import { parseScrapperOptions, ScrapperImpl } from "../ScrapperImpl";
+import { parseScrapperOptions, ScrapperImpl } from "../../ScrapperImpl";
 import { logger } from '../../../Logging';
 //import * as p from 'puppeteer';
 import { Page, HTTPResponse, LaunchOptions } from 'puppeteer';

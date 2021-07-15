@@ -1,7 +1,7 @@
 import { NotificationModel } from "../../../notifications/NotificationModel";
 import NotificationsFacade from "../../../notifications/NotificationsFacade";
 import { ScrapperRun } from "../../ScrapperRun";
-import { ScrapperImpl } from "../ScrapperImpl";
+import { ScrapperImpl } from "../../ScrapperImpl";
 
 export class DefaultScrapper extends ScrapperImpl{
     constructor(){
