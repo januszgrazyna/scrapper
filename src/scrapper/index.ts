@@ -1,7 +1,7 @@
 import Scrapper from "./Scrapper";
 import { ScrapperOptions } from "./ScrapperOptions";
 import { logger, stopLogger } from '../Logging';
-import { FirebaseRunUpload } from "../runUpload/FirebaseRunUpload";
+import { FirebaseRunUpload } from "../runUpload/impl/FirebaseRunUpload";
 
 
 export async function start(opt: ScrapperOptions = new ScrapperOptions(), argv: any) {

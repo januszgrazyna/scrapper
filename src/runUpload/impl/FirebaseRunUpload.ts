@@ -1,9 +1,9 @@
-import { IRunUpload } from "./IRunUpload";
+import { IRunUpload } from "../IRunUpload";
 import * as fs from "fs";
 import { deepStrictEqual } from "assert";
-import { admin } from "../firebase";
+import { admin } from "../../firebase";
 import * as path from "path";
-import { ScrapperRun } from "../scrapper/ScrapperRun";
+import { ScrapperRun } from "../../scrapper/ScrapperRun";
 
 export class FirebaseRunUpload implements IRunUpload {
     async upload(scrapperRun: ScrapperRun): Promise<void> {
