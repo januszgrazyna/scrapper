@@ -14,9 +14,11 @@ export function parseScrapperOptions<T>(type: string, argv: any){
     return opt as T;
 }
 
+export type ScrapperImplId = string;
+
 export abstract class ScrapperImpl{
-    readonly implId: string;
-    constructor(implId: string){
+    readonly implId: ScrapperImplId;
+    constructor(implId: ScrapperImplId){
         this.implId = implId;
     }
 

@@ -1,11 +1,11 @@
-import { ScrapperImpl } from "./impl/ScrapperImpl";
+import { ScrapperImpl, ScrapperImplId } from "./impl/ScrapperImpl";
 
 export type ScrapperRunId = string;
 
 export class ScrapperRun{
     
     public readonly id: ScrapperRunId;
-    public readonly implId: string;
+    public readonly implId: ScrapperImplId;
     public readonly dateCreated: Date;
     public outputDirectory?: string;
     
