@@ -7,7 +7,7 @@ import { ScrapperImplLoader } from './ScrapperImplLoader';
 import { ScrapperOptions } from './ScrapperOptions';
 import * as fs from "fs";
 import * as path from "path";
-import { IResultsUpload } from '../outputUpload/IResultsUpload';
+import { IRunUpload } from '../runUpload/IRunUpload';
 import { ScrapperRun } from './ScrapperRun';
 
 
@@ -18,7 +18,7 @@ export default class Scrapper {
 
     constructor(
         private options: ScrapperOptions,
-        private resultsUpload: IResultsUpload,
+        private runUpload: IRunUpload,
         private argv?: any,
     ) {}
 
@@ -49,8 +49,8 @@ export default class Scrapper {
       configureScrapperLogger(this.options.type, this.options.debug);
       const impl = await this.loadImpl();
       const scrapperRun = new ScrapperRun(impl)
-      this.setOutputDir(impl.implId, scrapperRun);
-      logger.info(`Scrapper ${impl.implId} starting in ${this.outputDir} directory`)
+      this.setOutputDir(impl.id, scrapperRun);
+      logger.info(`Scrapper ${impl.id} starting in ${this.outputDir} directory`)
       const results = await impl.start(new NotificationsFacade(
         new FirebaseNotificationSender(),
         new FirestoreNotificationsStorageService(),
@@ -61,7 +61,7 @@ export default class Scrapper {
       scrapperRun.ensureValid();
 
       logger.on('finish', async () => {
-        setTimeout(async () => await this.resultsUpload.uploadResults(scrapperRun), 5000)
+        setTimeout(async () => await this.runUpload.upload(scrapperRun), 5000)
       })
       stopLogger()
 

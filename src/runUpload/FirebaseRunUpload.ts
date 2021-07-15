@@ -1,12 +1,12 @@
-import { IResultsUpload } from "./IResultsUpload";
+import { IRunUpload } from "./IRunUpload";
 import * as fs from "fs";
 import { deepStrictEqual } from "assert";
 import { admin } from "../firebase";
 import * as path from "path";
 import { ScrapperRun } from "../scrapper/ScrapperRun";
 
-export class FirebaseResultsUpload implements IResultsUpload {
-    async uploadResults(scrapperRun: ScrapperRun): Promise<void> {
+export class FirebaseRunUpload implements IRunUpload {
+    async upload(scrapperRun: ScrapperRun): Promise<void> {
         if(!fs.existsSync(scrapperRun.outputDirectory!)){
             throw new Error(`Output directory ${scrapperRun.outputDirectory!} doesn't exist`);
         }
