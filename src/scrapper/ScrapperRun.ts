@@ -10,11 +10,11 @@ export class ScrapperRun{
     public outputDirectory?: string;
     
 
-    private _results : any;
-    public get results() : any {
+    private _results : any | null;
+    public get results() : any | null {
         return this._results;
     }
-    public set results(v : any) {
+    public set results(v : any | null) {
         v = v ?? null;
         this._results = v;
     }

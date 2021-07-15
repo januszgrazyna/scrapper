@@ -19,7 +19,7 @@ export class FirebaseRunUpload implements IRunUpload {
             await bucket.upload(file, {destination: path.join(outputDirRelative, path.basename(file))})
         }
         await runs.doc(scrapperRun.id).set({
-            ...scrapperRun, "dateCreated": scrapperRun.dateCreated.toJSON()
+            ...scrapperRun, "dateCreated": scrapperRun.dateCreated.toJSON(), "_results": (scrapperRun.results ? JSON.stringify(scrapperRun.results) : scrapperRun.results)
         })
     }
 
