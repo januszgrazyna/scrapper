@@ -25,7 +25,7 @@ export class ScrapperRun{
         const now = new Date();
         this.id = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`;
         this.dateCreated = now;
-        this.implId = impl.implId;
+        this.implId = impl.id;
     }
 
     public ensureValid(){

@@ -17,9 +17,9 @@ export function parseScrapperOptions<T>(type: string, argv: any){
 export type ScrapperImplId = string;
 
 export abstract class ScrapperImpl{
-    readonly implId: ScrapperImplId;
+    readonly id: ScrapperImplId;
     constructor(implId: ScrapperImplId){
-        this.implId = implId;
+        this.id = implId;
     }
 
     abstract notificationIdentifierFactory(model: NotificationModel): string;
