@@ -26,5 +26,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14.17.2'
-      - run: yarn build
+      - run: yarn install
+      - run: yarn build-dev
       - run: yarn start --help
