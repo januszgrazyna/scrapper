@@ -23,6 +23,7 @@ export class PuppeterTestScrapper extends ScrapperImpl {
         let plug = StealthPlugin()
         console.log(plug.availableEvasions)
         puppeteer.use(plug);
+        // @ts-ignore 
         const browser = await puppeteer.launch({ headless: false, args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',

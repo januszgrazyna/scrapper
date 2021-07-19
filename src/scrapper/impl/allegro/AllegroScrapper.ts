@@ -144,6 +144,7 @@ export class AllegroScrapper extends ScrapperImpl {
                 logger.debug(`Setting proxy server to ${this.searchOptions!.proxyAddr}`)
                 browserArgs.push(`--proxy-server=${this.searchOptions!.proxyAddr}`)
             }
+            // @ts-ignore 
             const browser = await puppeteer.launch({ headless: false, args: browserArgs } as LaunchOptions);
             HumanizePlugin({
                 mouse: { showCursor: true, enabled: true }
@@ -156,10 +157,13 @@ export class AllegroScrapper extends ScrapperImpl {
                 /* categoryUrlString: 'podzespoly-komputerowe-karty-graficzne-260019',
                 searchTerm: "rtx 2060", */
                 this.searchOptions!.page ??= 1;
+                // @ts-ignore 
                 await this.enterItemsPage(this.searchOptions!, page, this.searchOptions!.page);
                 await this.randomSleep()
+                // @ts-ignore 
                 await this.clickConsentButton(page);
 
+                // @ts-ignore 
                 const totalPages = await this.getTotalPages(page);
                 logger.info(`total pages: ${totalPages}`);
                 this.searchOptions!.maxPage ??= totalPages
@@ -171,8 +175,10 @@ export class AllegroScrapper extends ScrapperImpl {
                 while (currentPage != maxPage) {
                     if (this.searchOptions!.page != currentPage) {
                         await this.randomSleep()
+                        // @ts-ignore 
                         await this.enterItemsPage(this.searchOptions!, page, currentPage);
                     }
+                    // @ts-ignore 
                     const items = await this.getAllegroItems(page);
                     
                     for (const item of items) {
