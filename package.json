@@ -4,9 +4,9 @@
   "description": "scrapper",
   "main": "dist/index.js",
   "scripts": {
-    "test": "jest",
-    "build-dev": "tsc",
-    "build": "tsc && cp package.json ./dist && rm -r ./dist/__tests__ && (cd dist && yarn install --production --force)",
+    "test": "npx jest",
+    "build-dev": "npx tsc",
+    "build": "npx tsc && cp package.json ./dist && rm -r ./dist/__tests__ && (cd dist && yarn install --production --force)",
     "start": "node index.js",
     "start-dev": "node ./dist/index.js",
     "clean": "rm -rf ./dist"
