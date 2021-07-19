@@ -8,5 +8,6 @@ logs
 tests/__tests__
 *.lock
 outputs/
-test_httpserver/
+test_httpserver/*
+!test_httpserver/allegro_run.sh
 src/dev/
