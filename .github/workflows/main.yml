@@ -37,8 +37,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - run: yarn install
-      - run: yarn build-dev
-      - run: bash start.sh
+      - run: yarn run build-dev
+      - run: yarn run start-file
         env:
           SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
           FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
