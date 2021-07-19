@@ -7,8 +7,8 @@
     "test": "npx jest",
     "build-dev": "npx tsc",
     "build": "npx tsc && cp package.json ./dist && rm -r ./dist/__tests__ && (cd dist && yarn install --production --force)",
-    "start": "node index.js",
-    "start-dev": "node ./dist/index.js",
+    "start": "cd dist && node src/index.js",
+    "start-dev": "cd dist && node src/index.js",
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
