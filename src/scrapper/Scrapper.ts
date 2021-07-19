@@ -45,26 +45,35 @@ export default class Scrapper {
       logger.info(`Scraper ${scrapperType} starting in ${dir}`)
     }
 
-    async start() {
+    async start(): Promise<ScrapperRun> {
       configureScrapperLogger(this.options.type, this.options.debug);
       const impl = await this.loadImpl();
       const scrapperRun = new ScrapperRun(impl)
       this.setOutputDir(impl.id, scrapperRun);
       logger.info(`Scrapper ${impl.id} starting in ${this.outputDir} directory`)
-      const results = await impl.start(new NotificationsFacade(
-        new FirebaseNotificationSender(),
-        new FirestoreNotificationsStorageService(),
-        impl.notificationIdentifierFactory,
-      ), scrapperRun, this.argv);
-      scrapperRun.results = results;
-      scrapperRun.outputDirectory = this.outputDir!;
-      scrapperRun.ensureValid();
 
-      logger.on('finish', async () => {
-        setTimeout(async () => await this.runUpload.upload(scrapperRun), 5000)
-      })
-      stopLogger()
-
+      try {
+        scrapperRun.outputDirectory = this.outputDir!;
+        const results = await impl.start(new NotificationsFacade(
+          new FirebaseNotificationSender(),
+          new FirestoreNotificationsStorageService(),
+          impl.notificationIdentifierFactory,
+        ), scrapperRun, this.argv);
+        scrapperRun.results = results;
+      } catch (error) {
+        scrapperRun.error = true
+        scrapperRun.results = null
+        logger.error(`Error raised while running scrapper ${impl.id}: ${error}`)
+        logger.error(`${error.stack}`)
+      }
+      finally{
+        scrapperRun.ensureValid();
+        logger.on('finish', async () => {
+          setTimeout(async () => await this.runUpload.upload(scrapperRun), 5000)
+        })
+        stopLogger()
+      }
+      return scrapperRun;
     }
 
     async stop() {

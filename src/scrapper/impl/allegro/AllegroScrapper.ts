@@ -193,10 +193,9 @@ export class AllegroScrapper extends ScrapperImpl {
                     currentPage++;
                 }
             } catch (error) {
-                logger.error(error);
                 await page.screenshot({ path: 'error.png' });
                 await browser.close();
-                return;
+                throw error;
             }
             finally{
                 await this.notificationsFacade?.sendNotifications(notificationsToSend);

@@ -1,3 +1,4 @@
+import { exit } from 'process';
 import yargs from 'yargs';
 import * as scrapper from './scrapper';
 
@@ -21,10 +22,13 @@ yargs(hideBin(process.argv))
     if(debug){
       process.env['DEBUG'] = "true"
     }
-    await scrapper.start({
+    const result = await scrapper.start({
       type: argv.type as string,
       debug: debug
     }, argv);
+    if(result.error){
+      exit(1)
+    }
   })
 
   .help()

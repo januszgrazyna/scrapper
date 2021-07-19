@@ -8,7 +8,7 @@ export class ScrapperRun{
     public readonly implId: ScrapperImplId;
     public readonly dateCreated: Date;
     public outputDirectory?: string;
-    
+    public error: boolean = false;
 
     private _results : any | null;
     public get results() : any | null {
