@@ -1,4 +1,6 @@
-export interface SearchOptions {
+import { SearchOptionsBase } from "../../SearchOptionsBase";
+
+export interface SearchOptions extends SearchOptionsBase {
     categoryUrlString: string;
     searchTerm: string;
     notificationExpr: string;

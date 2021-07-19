@@ -132,14 +132,19 @@ export class AllegroScrapper extends ScrapperImpl {
             logger.debug("Allegro scrapper is starting");
 
             puppeteer.use(StealthPlugin());
-            const browser = await puppeteer.launch({ headless: false, args: [
+            const browserArgs = [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
                 '--disable-infobars',
                 '--window-position=0,0',
                 '--ignore-certifcate-errors',
                 '--ignore-certifcate-errors-spki-list'
-            ] } as LaunchOptions);
+            ]
+            if(this.searchOptions!.proxyAddr){
+                logger.debug(`Setting proxy server to ${this.searchOptions!.proxyAddr}`)
+                browserArgs.push(`--proxy-server=${this.searchOptions!.proxyAddr}`)
+            }
+            const browser = await puppeteer.launch({ headless: false, args: browserArgs } as LaunchOptions);
             HumanizePlugin({
                 mouse: { showCursor: true, enabled: true }
             }).enable();
