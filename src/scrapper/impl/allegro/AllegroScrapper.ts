@@ -182,7 +182,7 @@ export class AllegroScrapper extends ScrapperImpl {
                     const items = await this.getAllegroItems(page);
                     
                     for (const item of items) {
-                        if (eval(`(${this.searchOptions?.notificationExpr})`)) {
+                        if (this.searchOptions!.notificationExpr && eval(`(${this.searchOptions!.notificationExpr})`)) {
                             const title = '[Allegro] Found item with price: ' + item.price;
                             const body = item.title!;
                             const notification = new NotificationModel(this.scrapperRun?.id!, title, body);

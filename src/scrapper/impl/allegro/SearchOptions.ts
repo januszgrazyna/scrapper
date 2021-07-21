@@ -3,7 +3,7 @@ import { SearchOptionsBase } from "../../SearchOptionsBase";
 export interface SearchOptions extends SearchOptionsBase {
     categoryUrlString: string;
     searchTerm: string;
-    notificationExpr: string;
+    notificationExpr?: string;
     interval?: number;
     page?: number;
     buyNow?: boolean;
