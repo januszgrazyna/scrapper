@@ -14,4 +14,7 @@ export async function start(opt: ScrapperOptions = new ScrapperOptions(), argv: 
         logger.error(`${error.stack}`)
         throw error
     }
+    finally{
+        stopLogger()
+    }
 }

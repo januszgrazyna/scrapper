@@ -38,7 +38,7 @@ export default class Scrapper {
       if(!fs.existsSync("outputs")){
           fs.mkdirSync("outputs");
       }
-      const dir = this.outputDir = path.join(process.cwd(), "outputs", scrapperRun.id);
+      const dir = this.outputDir = path.join("outputs", scrapperRun.id);
       fs.mkdirSync(dir)
       process.chdir(dir)
       logger.info(`Scraper ${scrapperType} starting in ${dir}`)
@@ -70,7 +70,6 @@ export default class Scrapper {
         logger.on('finish', async () => {
           setTimeout(async () => await this.runUpload.upload(scrapperRun), 5000)
         })
-        stopLogger()
       }
       return scrapperRun;
     }

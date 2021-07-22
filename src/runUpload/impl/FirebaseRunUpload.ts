@@ -7,16 +7,18 @@ import { ScrapperRun } from "../../scrapper/ScrapperRun";
 
 export class FirebaseRunUpload implements IRunUpload {
     async upload(scrapperRun: ScrapperRun): Promise<void> {
-        if(!fs.existsSync(scrapperRun.outputDirectory!)){
-            throw new Error(`Output directory ${scrapperRun.outputDirectory!} doesn't exist`);
+        //assuming output directory is set as current directory
+        const fullOutputDir = process.cwd()
+        if(!fs.existsSync(fullOutputDir)){
+            throw new Error(`Output directory ${fullOutputDir} doesn't exist`);
         }
-        const outputDirRelative = scrapperRun.outputDirectory!.split(path.sep).slice(-2).reduce((acc, x) => path.join(acc, x), "")
-        const files = fs.readdirSync(scrapperRun.outputDirectory!);
+
+        const files = fs.readdirSync(fullOutputDir);
         var bucket = admin.storage().bucket();
         const runs = admin.firestore().collection("runs");
-        console.log(`Sending ${files.length} files from ${scrapperRun.outputDirectory} into ${outputDirRelative}`)
+        console.log(`Sending ${files.length} files from ${fullOutputDir} into ${scrapperRun.outputDirectory!}`)
         for (const file of files) {            
-            await bucket.upload(file, {destination: path.join(outputDirRelative, path.basename(file))})
+            await bucket.upload(file, {destination: path.join(scrapperRun.outputDirectory!, path.basename(file))})
         }
         await runs.doc(scrapperRun.id).set({
             ...scrapperRun, "dateCreated": scrapperRun.dateCreated.toJSON(), "_results": (scrapperRun.results ? JSON.stringify(scrapperRun.results) : scrapperRun.results)
