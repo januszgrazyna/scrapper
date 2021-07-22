@@ -126,9 +126,11 @@ export class AllegroScrapper extends ScrapperImpl {
     }
 
     private async startScrapping() {
-        let totalItems: Item[] = []
         let repeatCount = 0;
         const f = async () => {
+            let allItems: Item[] = []
+            let itemsToSend: Item[] = []
+
             logger.debug("Allegro scrapper is starting");
 
             puppeteer.use(StealthPlugin());
@@ -189,12 +191,13 @@ export class AllegroScrapper extends ScrapperImpl {
 
                             notification.url = item.link!;
                             notificationsToSend.push(notification)
+                            itemsToSend.push(item)
                         }
                     }
 
                     let itemsStrAttr = items.map(v => ({ ...v, attributes: v.attributes?.map(v => `${v.k} ${v.v}`) }));
                     //console.log(itemsStrAttr);
-                    totalItems = totalItems.concat(items)
+                    allItems = allItems.concat(items)
 
                     currentPage++;
                 }
@@ -215,9 +218,14 @@ export class AllegroScrapper extends ScrapperImpl {
             }else{
                 logger.debug(`Allegro scrapper finished`);
             }
+
+            return {
+                totalItems: allItems.length,
+                foundItems: itemsToSend
+            } as AllegroResult
         };
-        await f();
-        logger.info(`Processed ${totalItems.length} items`)
+        const result = await f();
+        logger.info(`Processed ${result.totalItems} items. Found ${result.foundItems.length}.`)
     }
 
     async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperRun, argv?: any): Promise<void> {
@@ -230,4 +238,9 @@ export class AllegroScrapper extends ScrapperImpl {
     notificationIdentifierFactory(model: NotificationModel): string {
         return `[Allegro]${model.title}${model.url}${model.body}`;
     }
+}
+
+interface AllegroResult{
+    totalItems: number;
+    foundItems: Item[];
 }
