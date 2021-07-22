@@ -1,4 +1,3 @@
-import { INotificationSender } from "../notifications/NotificationSender";
 import { NotificationModel } from "../notifications/NotificationModel";
 import NotificationsFacade from "../notifications/NotificationsFacade";
 import { ScrapperRun } from "./ScrapperRun";

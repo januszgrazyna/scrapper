@@ -1,8 +1,6 @@
 import { logger, configureScrapperLogger, stopLogger } from '../Logging';
 import { ScrapperImpl } from './ScrapperImpl';
-import { FirebaseNotificationSender } from '../notifications/impl/FirebaseNotificationSender';
 import NotificationsFacade from '../notifications/NotificationsFacade';
-import { FirestoreNotificationsStorageService } from '../notifications/impl/FirestoreNotificationsStorageService';
 import { ScrapperImplLoader } from './ScrapperImplLoader';
 import { ScrapperOptions } from './ScrapperOptions';
 import * as fs from "fs";

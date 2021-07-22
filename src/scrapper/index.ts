@@ -1,7 +1,6 @@
 import Scrapper from "./Scrapper";
 import { ScrapperOptions } from "./ScrapperOptions";
 import { logger, stopLogger } from '../Logging';
-import { FirebaseRunUpload } from "../runUpload/impl/FirebaseRunUpload";
 import { ScrapperRun } from "./ScrapperRun";
 import * as CompositionRoot from '../CompositionRoot';
 
