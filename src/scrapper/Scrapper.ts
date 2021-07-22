@@ -9,6 +9,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { IRunUpload } from '../runUpload/IRunUpload';
 import { ScrapperRun } from './ScrapperRun';
+import * as CompositionRoot from '../CompositionRoot';
 
 
 
@@ -55,8 +56,8 @@ export default class Scrapper {
       try {
         scrapperRun.outputDirectory = this.outputDir!;
         const results = await impl.start(new NotificationsFacade(
-          new FirebaseNotificationSender(),
-          new FirestoreNotificationsStorageService(),
+          CompositionRoot.notificationSender,
+          CompositionRoot.notificationsStorageService,
           impl.notificationIdentifierFactory,
         ), scrapperRun, this.argv);
         scrapperRun.results = results;

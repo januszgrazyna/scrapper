@@ -3,10 +3,11 @@ import { ScrapperOptions } from "./ScrapperOptions";
 import { logger, stopLogger } from '../Logging';
 import { FirebaseRunUpload } from "../runUpload/impl/FirebaseRunUpload";
 import { ScrapperRun } from "./ScrapperRun";
+import * as CompositionRoot from '../CompositionRoot';
 
 
 export async function start(opt: ScrapperOptions = new ScrapperOptions(), argv: any): Promise<ScrapperRun> {
-    let scrapper = new Scrapper(opt, new FirebaseRunUpload(), argv);
+    let scrapper = new Scrapper(opt, CompositionRoot.runUpload, argv);
     try {
         return await scrapper.start();        
     } catch (error) {
