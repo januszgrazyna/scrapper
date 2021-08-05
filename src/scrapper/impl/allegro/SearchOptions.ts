@@ -1,4 +1,4 @@
-import { SearchOptionsBase } from "../../SearchOptionsBase";
+import { SearchOptionsBase } from "../../models/SearchOptionsBase";
 
 export interface SearchOptions extends SearchOptionsBase {
     categoryUrlString: string;

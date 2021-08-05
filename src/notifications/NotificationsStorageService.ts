@@ -1,4 +1,4 @@
-import { NotificationModel } from "./NotificationModel";
+import { NotificationModel } from "./models/NotificationModel";
 
 
 

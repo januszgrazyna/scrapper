@@ -2,11 +2,11 @@ import { logger, configureScrapperLogger, stopLogger } from '../Logging';
 import { ScrapperImpl } from './ScrapperImpl';
 import NotificationsFacade from '../notifications/NotificationsFacade';
 import { ScrapperImplLoader } from './ScrapperImplLoader';
-import { ScrapperOptions } from './ScrapperOptions';
+import { ScrapperOptions } from './models/ScrapperOptions';
 import * as fs from "fs";
 import * as path from "path";
-import { IRunUpload } from '../runUpload/IRunUpload';
-import { ScrapperRun } from './ScrapperRun';
+import { IRunUploadService } from '../runUpload/IRunUploadService';
+import { ScrapperRun } from './models/ScrapperRun';
 import * as CompositionRoot from '../CompositionRoot';
 
 
@@ -17,7 +17,7 @@ export default class Scrapper {
 
     constructor(
         private options: ScrapperOptions,
-        private runUpload: IRunUpload,
+        private runUploadService: IRunUploadService,
         private argv?: any,
     ) {}
 
@@ -53,10 +53,10 @@ export default class Scrapper {
 
       try {
         logger.debug(`Adding new run with id ${scrapperRun.id}`)
-        await this.runUpload.add(scrapperRun)
+        await this.runUploadService.add(scrapperRun)
         scrapperRun.outputDirectory = this.outputDir!;
         const results = await impl.start(new NotificationsFacade(
-          CompositionRoot.notificationSender,
+          CompositionRoot.notificationSenderService,
           CompositionRoot.notificationsStorageService,
           impl.notificationIdentifierFactory,
         ), scrapperRun, this.argv);
@@ -69,7 +69,7 @@ export default class Scrapper {
       }
       finally{
         logger.on('finish', async () => {
-          setTimeout(async () => await this.runUpload.updateAndSendResults(scrapperRun), 5000)
+          setTimeout(async () => await this.runUploadService.updateAndSendResults(scrapperRun), 5000)
         })
       }
       return scrapperRun;

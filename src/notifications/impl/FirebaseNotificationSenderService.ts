@@ -1,8 +1,8 @@
-import { INotificationSender } from "../NotificationSender";
-import { NotificationModel } from "../NotificationModel";
+import { INotificationSenderService } from "../NotificationSenderService";
+import { NotificationModel } from "../models/NotificationModel";
 import { admin } from "../../firebase";
 
-export class FirebaseNotificationSender implements INotificationSender {
+export class FirebaseNotificationSenderService implements INotificationSenderService {
     static topic = "scrapper";
 
     async sendNotification(model: NotificationModel): Promise<any> {
@@ -15,7 +15,7 @@ export class FirebaseNotificationSender implements INotificationSender {
                 scrapperRunId: model.scrapperRunId,
                 options: NotificationModel.stringifiedOptions(model.options),
             },
-            topic: FirebaseNotificationSender.topic
+            topic: FirebaseNotificationSenderService.topic
         };
         return admin.messaging().send(message);
     }

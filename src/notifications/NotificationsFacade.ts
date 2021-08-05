@@ -1,5 +1,5 @@
-import { INotificationSender } from './NotificationSender';
-import { NotificationModel } from "./NotificationModel";
+import { INotificationSenderService } from './NotificationSenderService';
+import { NotificationModel } from "./models/NotificationModel";
 import { INotificationsStorageService } from './NotificationsStorageService';
 import { logger } from '../Logging';
 
@@ -7,7 +7,7 @@ export default class NotificationsFacade {
     private _notificationIdentifierFactory: (model: NotificationModel) => string = null!;
 
     constructor(
-        private notificationSender: INotificationSender,
+        private notificationSenderService: INotificationSenderService,
         private notificationsStorageService: INotificationsStorageService,
         notificationIdentifierFactory: (model: NotificationModel) => string,
     ) {
@@ -26,7 +26,7 @@ export default class NotificationsFacade {
           }else{
             const addResult = await this.notificationsStorageService.addNotification(notification);
           }
-          const sendResult = await this.notificationSender.sendNotification(notification);
+          const sendResult = await this.notificationSenderService.sendNotification(notification);
       }
 
       return true;

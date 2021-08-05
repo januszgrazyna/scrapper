@@ -1,5 +1,5 @@
-import { FirebaseNotificationSender } from "../src/notifications/impl/FirebaseNotificationSender";
-import { NotificationModel } from "../src/notifications/NotificationModel";
+import { FirebaseNotificationSenderService } from "../src/notifications/impl/FirebaseNotificationSenderService";
+import { NotificationModel } from "../src/notifications/models/NotificationModel";
 import NotificationsFacade from "../src/notifications/NotificationsFacade";
 import { FirestoreNotificationsStorageService } from "../src/notifications/impl/FirestoreNotificationsStorageService";
 import { clearFirestoreCollection } from "./utils/firestoreTestUtils";
@@ -17,7 +17,7 @@ test('', async () => {
     notification.title = "test";
     notification.body = "message test";
 
-    const facade = new NotificationsFacade(new FirebaseNotificationSender(), service, (_) => "id2");
+    const facade = new NotificationsFacade(new FirebaseNotificationSenderService(), service, (_) => "id2");
     let sent = await facade.sendNotifications([notification]);
     expect(sent).toBeTruthy();
     sent = await facade.sendNotifications([notification]);

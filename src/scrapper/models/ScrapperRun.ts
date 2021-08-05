@@ -1,4 +1,4 @@
-import { ScrapperImpl, ScrapperImplId } from "./ScrapperImpl";
+import { ScrapperImpl, ScrapperImplId } from "../ScrapperImpl";
 
 export type ScrapperRunId = string;
 

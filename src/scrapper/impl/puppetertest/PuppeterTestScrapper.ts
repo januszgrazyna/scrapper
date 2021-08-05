@@ -3,11 +3,11 @@ import { logger } from '../../../Logging';
 //import * as p from 'puppeteer';
 import { Page, HTTPResponse, LaunchOptions } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
-import { NotificationModel } from "../../../notifications/NotificationModel";
+import { NotificationModel } from "../../../notifications/models/NotificationModel";
 import NotificationsFacade from "../../../notifications/NotificationsFacade";
 import HumanizePlugin from '@extra/humanize';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import { ScrapperRun } from "../../ScrapperRun";
+import { ScrapperRun } from "../../models/ScrapperRun";
 
 
 export class PuppeterTestScrapper extends ScrapperImpl {

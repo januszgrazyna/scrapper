@@ -1,6 +1,6 @@
-import { NotificationModel } from "../../../notifications/NotificationModel";
+import { NotificationModel } from "../../../notifications/models/NotificationModel";
 import NotificationsFacade from "../../../notifications/NotificationsFacade";
-import { ScrapperRun } from "../../ScrapperRun";
+import { ScrapperRun } from "../../models/ScrapperRun";
 import { parseScrapperOptions, ScrapperImpl } from "../../ScrapperImpl";
 import { sleep } from "../../../utils";
 

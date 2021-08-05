@@ -1,4 +1,4 @@
-import { NotificationModel } from "../src/notifications/NotificationModel";
+import { NotificationModel } from "../src/notifications/models/NotificationModel";
 import { FirestoreNotificationsStorageService } from "../src/notifications/impl/FirestoreNotificationsStorageService";
 import { clearFirestoreCollection } from "./utils/firestoreTestUtils";
 

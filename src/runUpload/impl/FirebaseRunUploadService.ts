@@ -1,12 +1,12 @@
-import { IRunUpload } from "../IRunUpload";
+import { IRunUploadService } from "../IRunUploadService";
 import * as fs from "fs";
 import { deepStrictEqual } from "assert";
 import { admin } from "../../firebase";
 import * as path from "path";
-import { ScrapperRun } from "../../scrapper/ScrapperRun";
+import { ScrapperRun } from "../../scrapper/models/ScrapperRun";
 import { setDateFieldsToJsonStr, trimBackingFieldNames } from "../../utils";
 
-export class FirebaseRunUpload implements IRunUpload {
+export class FirebaseRunUploadService implements IRunUploadService {
     async add(scrapperRun: ScrapperRun): Promise<void> {
         const runs = admin.firestore().collection("runs");
         let scrapperRunData = trimBackingFieldNames(scrapperRun);
