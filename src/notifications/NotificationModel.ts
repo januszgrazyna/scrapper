@@ -9,7 +9,6 @@ export class NotificationModel {
 
     title: string;
     body: string;
-    url?: string;
     options?: string;
 
     static fromLiteral(obj: Partial<NotificationModel>): NotificationModel {
@@ -19,7 +18,7 @@ export class NotificationModel {
     }
 
     constructor(
-        public scrapperRunId: ScrapperRunId, title: string, body: string
+        public scrapperRunId: ScrapperRunId, title: string, body: string, public url: string | null = null
     ) {
         this._dateCreated = new Date();
         this._id = uuidv4();

@@ -52,6 +52,8 @@ export default class Scrapper {
       logger.info(`Scrapper ${impl.id} starting in ${this.outputDir} directory`)
 
       try {
+        logger.debug(`Adding new run with id ${scrapperRun.id}`)
+        await this.runUpload.add(scrapperRun)
         scrapperRun.outputDirectory = this.outputDir!;
         const results = await impl.start(new NotificationsFacade(
           CompositionRoot.notificationSender,
@@ -59,16 +61,15 @@ export default class Scrapper {
           impl.notificationIdentifierFactory,
         ), scrapperRun, this.argv);
         scrapperRun.results = results;
+        scrapperRun.setFinished()
       } catch (error) {
-        scrapperRun.error = true
-        scrapperRun.results = null
+        scrapperRun.setFailed()
         logger.error(`Error raised while running scrapper ${impl.id}: ${error}`)
         logger.error(`${error.stack}`)
       }
       finally{
-        scrapperRun.ensureValid();
         logger.on('finish', async () => {
-          setTimeout(async () => await this.runUpload.upload(scrapperRun), 5000)
+          setTimeout(async () => await this.runUpload.updateAndSendResults(scrapperRun), 5000)
         })
       }
       return scrapperRun;

@@ -2,34 +2,77 @@ import { ScrapperImpl, ScrapperImplId } from "./ScrapperImpl";
 
 export type ScrapperRunId = string;
 
+export type ScrapperRunStatus =
+    | "running"
+    | "finished"
+    | "failed"
+
 export class ScrapperRun{
     
     public readonly id: ScrapperRunId;
     public readonly implId: ScrapperImplId;
     public readonly dateCreated: Date;
-    public outputDirectory?: string;
-    public error: boolean = false;
 
-    private _results : any | null;
+    private _outputDirectory: string | null = null;
+    private _dateFinished: Date | null = null;
+    private _status: ScrapperRunStatus;
+    private _results : any | null = null;
     public get results() : any | null {
         return this._results;
     }
     public set results(v : any | null) {
         v = v ?? null;
         this._results = v;
+        this.ensureValid();
+    }
+    public get status(): ScrapperRunStatus {
+        return this._status;
+    }
+    public get dateFinished(): Date | null {
+        return this._dateFinished;
+    }
+
+    public get outputDirectory(): string | null{
+        return this._outputDirectory;
+    }
+    public set outputDirectory(v: string | null){
+        if(!v){
+            throw new Error("Cannot set null output directory")
+        }
+        this._outputDirectory = v;
+        this.ensureValid();
+    }
+
+    public setFinished(){
+        if(this._status != "running" || this.dateFinished){
+            throw new Error("Cannot set scrapperRun status")
+        }
+        this._status = "finished";
+        this._dateFinished = new Date();
+        this.ensureValid();
+    }
+
+    public setFailed(){
+        if(this._status != "running" || this.dateFinished){
+            throw new Error("Cannot set scrapperRun status")
+        }
+        this._status = "failed";
+        this._dateFinished = new Date();
+        this.ensureValid();
     }
 
     constructor(
         impl: ScrapperImpl
     ){
         const now = new Date();
-        this.id = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`;
+        this.id = `${impl.id}_${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`;
         this.dateCreated = now;
         this.implId = impl.id;
+        this._status = "running";
     }
 
     public ensureValid(){
-        if(this.results === undefined || this.outputDirectory == null){
+        if(this.results === undefined || this._outputDirectory == null){
             throw new Error("ScrapperRun instance is not valid")
         } 
     }

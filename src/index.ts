@@ -26,7 +26,7 @@ yargs(hideBin(process.argv))
       type: argv.type as string,
       debug: debug
     }, argv);
-    if(result.error){
+    if(result.status == "failed"){
       exit(1)
     }
   })
