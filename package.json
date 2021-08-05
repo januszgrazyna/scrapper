@@ -10,7 +10,8 @@
     "start": "cd dist && node src/index.js",
     "start-dev": "cd dist && node src/index.js",
     "start-file": "cd dist && bash start.sh",
-    "clean": "rm -rf ./dist"
+    "clean": "rm -rf ./dist",
+    "clean-outputs": "rm -rf ./outputs"
   },
   "dependencies": {
     "automation-extra-plugin": "^4.2.2-next.616",
