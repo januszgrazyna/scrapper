@@ -69,6 +69,7 @@ export default class Scrapper {
       } catch (error) {
         scrapperRun.setFailed()
         logger.error(`Error raised while running scrapper ${impl.id}: ${error}`)
+        // @ts-ignore
         logger.error(`${error.stack}`)
       }
       finally{
