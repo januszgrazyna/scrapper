@@ -6,11 +6,13 @@ import * as scrapper from './scrapper';
 const { hideBin } = require('yargs/helpers')
 
 yargs(hideBin(process.argv))
-  .command('scrap', 'start scrapper', (yargs) => {
+  .command('scrap <type> <runConfigurationId>', 'start scrapper', (yargs) => {
     yargs
-      .option('type', {
+      .positional('type', {
         describe: 'scrapper type',
-        default: 'Default',
+      })
+      .positional('runConfigurationId', {
+        describe: 'runConfiguration id',
       })
       .option('debug', {
         describe: 'debug',
@@ -24,6 +26,7 @@ yargs(hideBin(process.argv))
     }
     const result = await scrapper.start({
       type: argv.type as string,
+      runConfigurationId: argv.runConfigurationId as string,
       debug: debug
     }, argv);
     if(result.status == "failed"){

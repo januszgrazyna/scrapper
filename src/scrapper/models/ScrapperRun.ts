@@ -7,16 +7,31 @@ export type ScrapperRunStatus =
     | "finished"
     | "failed"
 
+export type RunConfigurationId = string;
+
 export class ScrapperRun{
     
     public readonly id: ScrapperRunId;
     public readonly implId: ScrapperImplId;
     public readonly dateCreated: Date;
+    public readonly runConfigurationId: RunConfigurationId;
 
     private _outputDirectory: string | null = null;
     private _dateFinished: Date | null = null;
     private _status: ScrapperRunStatus;
     private _results : any | null = null;
+
+    constructor(
+        impl: ScrapperImpl, runConfigurationId: RunConfigurationId
+    ){
+        const now = new Date();
+        this.id = `${impl.id}_${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`;
+        this.dateCreated = now;
+        this.implId = impl.id;
+        this.runConfigurationId = runConfigurationId;
+        this._status = "running";
+    }
+
     public get results() : any | null {
         return this._results;
     }
@@ -59,16 +74,6 @@ export class ScrapperRun{
         this._status = "failed";
         this._dateFinished = new Date();
         this.ensureValid();
-    }
-
-    constructor(
-        impl: ScrapperImpl
-    ){
-        const now = new Date();
-        this.id = `${impl.id}_${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`;
-        this.dateCreated = now;
-        this.implId = impl.id;
-        this._status = "running";
     }
 
     public ensureValid(){

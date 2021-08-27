@@ -19,7 +19,11 @@ export default class Scrapper {
         private options: ScrapperOptions,
         private runUploadService: IRunUploadService,
         private argv?: any,
-    ) {}
+    ) {
+      if(!options.runConfigurationId){
+        throw new Error("Unknown RunConfigurationId");
+      }
+    }
 
     private async loadImpl(): Promise<ScrapperImpl> {
       let impl: ScrapperImpl;
@@ -47,7 +51,7 @@ export default class Scrapper {
     async start(): Promise<ScrapperRun> {
       configureScrapperLogger(this.options.type, this.options.debug);
       const impl = await this.loadImpl();
-      const scrapperRun = new ScrapperRun(impl)
+      const scrapperRun = new ScrapperRun(impl, this.options.runConfigurationId!)
       this.setOutputDir(impl.id, scrapperRun);
       logger.info(`Scrapper ${impl.id} starting in ${this.outputDir} directory`)
 

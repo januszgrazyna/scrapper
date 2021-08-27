@@ -12,8 +12,10 @@ export class DefaultScrapper extends ScrapperImpl{
     async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperRun, argv?: any): Promise<void> {
         console.log("Default scrapper started");
         const opt = parseScrapperOptions<{sleep: number}>("default", argv);
-        console.log(`Sleeping ${opt.sleep}ms`);
-        await sleep(opt.sleep);
+        if(opt.sleep){
+            console.log(`Sleeping ${opt.sleep}ms`);
+            await sleep(opt.sleep);
+        }
         await notificationsFacade.sendNotifications([
             new NotificationModel(scrapperRun.id, "title", "body")
         ])
