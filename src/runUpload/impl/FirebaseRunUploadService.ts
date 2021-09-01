@@ -3,11 +3,11 @@ import * as fs from "fs";
 import { deepStrictEqual } from "assert";
 import { admin } from "../../firebase";
 import * as path from "path";
-import { ScrapperRun } from "../../scrapper/models/ScrapperRun";
+import { ScrapperResult } from "../../scrapper/models/ScrapperRun";
 import { setDateFieldsToJsonStr, trimBackingFieldNames } from "../../utils";
 
 export class FirebaseRunUploadService implements IRunUploadService {
-    async add(scrapperRun: ScrapperRun): Promise<void> {
+    async add(scrapperRun: ScrapperResult): Promise<void> {
         const runs = admin.firestore().collection("runs");
         let scrapperRunData = trimBackingFieldNames(scrapperRun);
         scrapperRunData = setDateFieldsToJsonStr(scrapperRunData)
@@ -15,7 +15,7 @@ export class FirebaseRunUploadService implements IRunUploadService {
             ...scrapperRunData, "results": (scrapperRun.results ? JSON.stringify(scrapperRun.results) : scrapperRun.results)
         })
     }
-    async updateAndSendResults(scrapperRun: ScrapperRun): Promise<void> {
+    async updateAndSendResults(scrapperRun: ScrapperResult): Promise<void> {
         //assuming output directory is set as current directory
         const fullOutputDir = process.cwd()
         if(!fs.existsSync(fullOutputDir)){

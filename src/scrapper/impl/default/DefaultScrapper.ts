@@ -1,15 +1,15 @@
 import { NotificationModel } from "../../../notifications/models/NotificationModel";
 import NotificationsFacade from "../../../notifications/NotificationsFacade";
-import { ScrapperRun } from "../../models/ScrapperRun";
-import { parseScrapperOptions, ScrapperImpl } from "../../ScrapperImpl";
+import { ScrapperResult } from "../../models/ScrapperRun";
+import { parseScrapperOptions, ScrapperImplBase } from "../../ScrapperImplBase";
 import { sleep } from "../../../utils";
 
-export class DefaultScrapper extends ScrapperImpl{
+export class DefaultScrapper extends ScrapperImplBase{
     constructor(){
         super("Default")
     }
 
-    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperRun, argv?: any): Promise<void> {
+    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult, argv?: any): Promise<void> {
         console.log("Default scrapper started");
         const opt = parseScrapperOptions<{sleep: number}>("default", argv);
         if(opt.sleep){

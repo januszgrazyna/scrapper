@@ -1,4 +1,4 @@
-import { parseScrapperOptions, ScrapperImpl } from "../../ScrapperImpl";
+import { parseScrapperOptions, ScrapperImplBase } from "../../ScrapperImplBase";
 import { logger } from '../../../Logging';
 import { Page, HTTPResponse, LaunchOptions } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
@@ -9,14 +9,14 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { Item } from "./Item";
 import { SearchOptions } from "./SearchOptions";
 import { sleep } from "../../../utils";
-import { ScrapperRun } from "../../models/ScrapperRun";
+import { ScrapperResult } from "../../models/ScrapperRun";
 
 
-export class AllegroScrapper extends ScrapperImpl {
+export class AllegroScrapper extends ScrapperImplBase {
     private interval: any;
     private searchOptions?: SearchOptions;
     private notificationsFacade?: NotificationsFacade;
-    private scrapperRun?: ScrapperRun;
+    private scrapperRun?: ScrapperResult;
 
     constructor() {
         super("Allegro");
@@ -228,7 +228,7 @@ export class AllegroScrapper extends ScrapperImpl {
         logger.info(`Processed ${result.totalItems} items. Found ${result.foundItems.length}.`)
     }
 
-    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperRun, argv?: any): Promise<void> {
+    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult, argv?: any): Promise<void> {
         this.searchOptions = parseScrapperOptions<SearchOptions>("allegro", argv);
         this.notificationsFacade = notificationsFacade;
         this.scrapperRun = scrapperRun;

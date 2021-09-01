@@ -1,4 +1,4 @@
-import { ScrapperImpl } from "./ScrapperImpl";
+import { ScrapperImplBase } from "./ScrapperImplBase";
 
 export class ScrapperImplLoader {
     private _modulesPath: string;
@@ -6,7 +6,7 @@ export class ScrapperImplLoader {
         this._modulesPath = modulesPath;
     }
 
-    async load(name: string): Promise<ScrapperImpl> {
+    async load(name: string): Promise<ScrapperImplBase> {
         let scrapperClass = name
         if (!scrapperClass.endsWith("Scrapper")) {
             scrapperClass = scrapperClass + "Scrapper";

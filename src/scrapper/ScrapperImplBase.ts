@@ -1,6 +1,6 @@
 import { NotificationModel } from "../notifications/models/NotificationModel";
 import NotificationsFacade from "../notifications/NotificationsFacade";
-import { ScrapperRun } from "./models/ScrapperRun";
+import { ScrapperResult } from "./models/ScrapperRun";
 
 export function parseScrapperOptions<T>(type: string, argv: any){
     const opt: any = {};    
@@ -15,12 +15,12 @@ export function parseScrapperOptions<T>(type: string, argv: any){
 
 export type ScrapperImplId = string;
 
-export abstract class ScrapperImpl{
+export abstract class ScrapperImplBase{
     readonly id: ScrapperImplId;
     constructor(implId: ScrapperImplId){
         this.id = implId;
     }
 
     abstract notificationIdentifierFactory(model: NotificationModel): string;
-    abstract start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperRun, argv?: any): Promise<any>;
+    abstract start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult, argv?: any): Promise<any>;
 }
