@@ -1,7 +1,7 @@
-import { ScrapperRun } from "../scrapper/models/ScrapperRun";
+import { ScrapperResult } from "../scrapper/models/ScrapperRun";
 
 
 export interface IRunUploadService {
-    add(scrapperRun: ScrapperRun): Promise<void>;
-    updateAndSendResults(scrapperRun: ScrapperRun): Promise<void>;
+    add(scrapperRun: ScrapperResult): Promise<void>;
+    updateAndSendResults(scrapperRun: ScrapperResult): Promise<void>;
 }

@@ -1,11 +1,11 @@
 import Scrapper from "./Scrapper";
 import { ScrapperOptions } from "./models/ScrapperOptions";
 import { logger, stopLogger } from '../Logging';
-import { ScrapperRun } from "./models/ScrapperRun";
+import { ScrapperResult } from "./models/ScrapperRun";
 import * as CompositionRoot from '../CompositionRoot';
 
 
-export async function start(opt: ScrapperOptions = new ScrapperOptions(), argv: any): Promise<ScrapperRun> {
+export async function start(opt: ScrapperOptions = new ScrapperOptions(), argv: any): Promise<ScrapperResult> {
     let scrapper = new Scrapper(opt, CompositionRoot.runUploadService, argv);
     try {
         return await scrapper.start();        

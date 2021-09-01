@@ -1,4 +1,4 @@
-import { ScrapperImpl, ScrapperImplId } from "../ScrapperImpl";
+import { ScrapperImplBase, ScrapperImplId } from "../ScrapperImplBase";
 
 export type ScrapperRunId = string;
 
@@ -9,7 +9,7 @@ export type ScrapperRunStatus =
 
 export type RunConfigurationId = string;
 
-export class ScrapperRun{
+export class ScrapperResult{
     
     public readonly id: ScrapperRunId;
     public readonly implId: ScrapperImplId;
@@ -22,7 +22,7 @@ export class ScrapperRun{
     private _results : any | null = null;
 
     constructor(
-        impl: ScrapperImpl, runConfigurationId: RunConfigurationId
+        impl: ScrapperImplBase, runConfigurationId: RunConfigurationId
     ){
         const now = new Date();
         this.id = `${impl.id}_${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`;

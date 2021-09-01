@@ -1,12 +1,12 @@
 import { logger, configureScrapperLogger, stopLogger } from '../Logging';
-import { ScrapperImpl } from './ScrapperImpl';
+import { ScrapperImplBase } from './ScrapperImplBase';
 import NotificationsFacade from '../notifications/NotificationsFacade';
 import { ScrapperImplLoader } from './ScrapperImplLoader';
 import { ScrapperOptions } from './models/ScrapperOptions';
 import * as fs from "fs";
 import * as path from "path";
 import { IRunUploadService } from '../runUpload/IRunUploadService';
-import { ScrapperRun } from './models/ScrapperRun';
+import { ScrapperResult } from './models/ScrapperRun';
 import * as CompositionRoot from '../CompositionRoot';
 
 
@@ -25,8 +25,8 @@ export default class Scrapper {
       }
     }
 
-    private async loadImpl(): Promise<ScrapperImpl> {
-      let impl: ScrapperImpl;
+    private async loadImpl(): Promise<ScrapperImplBase> {
+      let impl: ScrapperImplBase;
 
       try {
         impl = await this.scrapperImplLoader.load(this.options.type);
@@ -38,7 +38,7 @@ export default class Scrapper {
     }
 
     
-    private setOutputDir(scrapperType: string, scrapperRun: ScrapperRun){
+    private setOutputDir(scrapperType: string, scrapperRun: ScrapperResult){
       if(!fs.existsSync("outputs")){
           fs.mkdirSync("outputs");
       }
@@ -48,36 +48,36 @@ export default class Scrapper {
       logger.info(`Scraper ${scrapperType} starting in ${dir}`)
     }
 
-    async start(): Promise<ScrapperRun> {
+    async start(): Promise<ScrapperResult> {
       configureScrapperLogger(this.options.type, this.options.debug);
       const impl = await this.loadImpl();
-      const scrapperRun = new ScrapperRun(impl, this.options.runConfigurationId!)
-      this.setOutputDir(impl.id, scrapperRun);
+      const scrapperResult = new ScrapperResult(impl, this.options.runConfigurationId!)
+      this.setOutputDir(impl.id, scrapperResult);
       logger.info(`Scrapper ${impl.id} starting in ${this.outputDir} directory`)
 
       try {
-        logger.debug(`Adding new run with id ${scrapperRun.id}`)
-        await this.runUploadService.add(scrapperRun)
-        scrapperRun.outputDirectory = this.outputDir!;
+        logger.debug(`Adding new result with id ${scrapperResult.id}`)
+        await this.runUploadService.add(scrapperResult)
+        scrapperResult.outputDirectory = this.outputDir!;
         const results = await impl.start(new NotificationsFacade(
           CompositionRoot.notificationSenderService,
           CompositionRoot.notificationsStorageService,
           impl.notificationIdentifierFactory,
-        ), scrapperRun, this.argv);
-        scrapperRun.results = results;
-        scrapperRun.setFinished()
+        ), scrapperResult, this.argv);
+        scrapperResult.results = results;
+        scrapperResult.setFinished()
       } catch (error) {
-        scrapperRun.setFailed()
+        scrapperResult.setFailed()
         logger.error(`Error raised while running scrapper ${impl.id}: ${error}`)
         // @ts-ignore
         logger.error(`${error.stack}`)
       }
       finally{
         logger.on('finish', async () => {
-          setTimeout(async () => await this.runUploadService.updateAndSendResults(scrapperRun), 5000)
+          setTimeout(async () => await this.runUploadService.updateAndSendResults(scrapperResult), 5000)
         })
       }
-      return scrapperRun;
+      return scrapperResult;
     }
 
     async stop() {
