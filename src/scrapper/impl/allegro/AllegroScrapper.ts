@@ -125,7 +125,7 @@ export class AllegroScrapper extends ScrapperImplBase {
         await sleep(randomSleep)
     }
 
-    private async startScrapping() {
+    private async startScrapping(debug: boolean) {
         let repeatCount = 0;
         const f = async () => {
             let allItems: Item[] = []
@@ -147,7 +147,7 @@ export class AllegroScrapper extends ScrapperImplBase {
                 browserArgs.push(`--proxy-server=${this.searchOptions!.proxyAddr}`)
             }
             // @ts-ignore 
-            const browser = await puppeteer.launch({ headless: false, args: browserArgs } as LaunchOptions);
+            const browser = await puppeteer.launch({ headless: !debug, args: browserArgs } as LaunchOptions);
             HumanizePlugin({
                 mouse: { showCursor: true, enabled: true }
             }).enable();
@@ -228,11 +228,11 @@ export class AllegroScrapper extends ScrapperImplBase {
         logger.info(`Processed ${result.totalItems} items. Found ${result.foundItems.length}.`)
     }
 
-    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult, argv?: any): Promise<void> {
+    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult, debug: boolean, argv?: any): Promise<void> {
         this.searchOptions = parseScrapperOptions<SearchOptions>("allegro", argv);
         this.notificationsFacade = notificationsFacade;
         this.scrapperRun = scrapperRun;
-        await this.startScrapping();
+        await this.startScrapping(debug);
     }
 
     notificationIdentifierFactory(model: NotificationModel): string {

@@ -40,7 +40,7 @@ export class PuppeterTestScrapper extends ScrapperImplBase {
         await page.goto("http://127.0.0.1:8080/index.html")
     }
 
-    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult, argv?: any): Promise<any> {
+    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult,debug: boolean, argv?: any): Promise<any> {
         this.notificationsFacade = notificationsFacade;
         await this.startScrapping();
     }

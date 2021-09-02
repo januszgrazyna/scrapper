@@ -63,7 +63,7 @@ export default class Scrapper {
           CompositionRoot.notificationSenderService,
           CompositionRoot.notificationsStorageService,
           impl.notificationIdentifierFactory,
-        ), scrapperResult, this.argv);
+        ), scrapperResult, this.options.debug, this.argv);
         scrapperResult.results = results;
         scrapperResult.setFinished()
       } catch (error) {
