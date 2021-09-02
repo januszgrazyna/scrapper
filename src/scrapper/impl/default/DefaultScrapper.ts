@@ -9,7 +9,7 @@ export class DefaultScrapper extends ScrapperImplBase{
         super("Default")
     }
 
-    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult, argv?: any): Promise<void> {
+    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult, debug: boolean, argv?: any): Promise<void> {
         console.log("Default scrapper started");
         const opt = parseScrapperOptions<{sleep: number}>("default", argv);
         if(opt.sleep){
