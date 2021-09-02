@@ -5,7 +5,7 @@ import { ScrapperImplLoader } from './ScrapperImplLoader';
 import { ScrapperOptions } from './models/ScrapperOptions';
 import * as fs from "fs";
 import * as path from "path";
-import { IRunUploadService } from '../runUpload/IRunUploadService';
+import { IResultUploadService } from '../resultUpload/IResultUploadService';
 import { ScrapperResult } from './models/ScrapperRun';
 import * as CompositionRoot from '../CompositionRoot';
 
@@ -17,7 +17,7 @@ export default class Scrapper {
 
     constructor(
         private options: ScrapperOptions,
-        private runUploadService: IRunUploadService,
+        private resultUploadService: IResultUploadService,
         private argv?: any,
     ) {
       if(!options.runConfigurationId){
@@ -57,7 +57,7 @@ export default class Scrapper {
 
       try {
         logger.debug(`Adding new result with id ${scrapperResult.id}`)
-        await this.runUploadService.add(scrapperResult)
+        await this.resultUploadService.add(scrapperResult)
         scrapperResult.outputDirectory = this.outputDir!;
         const results = await impl.start(new NotificationsFacade(
           CompositionRoot.notificationSenderService,
@@ -71,10 +71,11 @@ export default class Scrapper {
         logger.error(`Error raised while running scrapper ${impl.id}: ${error}`)
         // @ts-ignore
         logger.error(`${error.stack}`)
+        await this.resultUploadService.updateResults(scrapperResult);
       }
       finally{
         logger.on('finish', async () => {
-          setTimeout(async () => await this.runUploadService.updateAndSendResults(scrapperResult), 5000)
+          setTimeout(async () => await this.resultUploadService.sendOutputs(scrapperResult), 5000)
         })
       }
       return scrapperResult;
