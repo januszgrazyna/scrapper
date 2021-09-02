@@ -6,7 +6,7 @@ import * as CompositionRoot from '../CompositionRoot';
 
 
 export async function start(opt: ScrapperOptions = new ScrapperOptions(), argv: any): Promise<ScrapperResult> {
-    let scrapper = new Scrapper(opt, CompositionRoot.runUploadService, argv);
+    let scrapper = new Scrapper(opt, CompositionRoot.resultUploadService, argv);
     try {
         return await scrapper.start();        
     } catch (error) {

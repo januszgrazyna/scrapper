@@ -2,11 +2,11 @@ import { FirebaseNotificationSenderService } from "./notifications/impl/Firebase
 import { FirestoreNotificationsStorageService } from "./notifications/impl/FirestoreNotificationsStorageService";
 import { INotificationSenderService } from "./notifications/NotificationSenderService";
 import { INotificationsStorageService } from "./notifications/NotificationsStorageService";
-import { FirebaseRunUploadService } from "./runUpload/impl/FirebaseRunUploadService";
-import { IRunUploadService } from "./runUpload/IRunUploadService";
+import { FirebaseResultUploadService } from "./resultUpload/impl/FirebaseResultUploadService";
+import { IResultUploadService } from "./resultUpload/IResultUploadService";
 
-const runUploadService: IRunUploadService = new FirebaseRunUploadService();
+const resultUploadService: IResultUploadService = new FirebaseResultUploadService();
 const notificationSenderService: INotificationSenderService = new FirebaseNotificationSenderService();
 const notificationsStorageService: INotificationsStorageService = new FirestoreNotificationsStorageService();
 
-export {runUploadService, notificationSenderService, notificationsStorageService}
+export {resultUploadService, notificationSenderService, notificationsStorageService}
