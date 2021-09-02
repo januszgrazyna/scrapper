@@ -71,10 +71,11 @@ export default class Scrapper {
         logger.error(`Error raised while running scrapper ${impl.id}: ${error}`)
         // @ts-ignore
         logger.error(`${error.stack}`)
+        await this.resultUploadService.updateResults(scrapperResult);
       }
       finally{
         logger.on('finish', async () => {
-          setTimeout(async () => await this.resultUploadService.updateAndSendResults(scrapperResult), 5000)
+          setTimeout(async () => await this.resultUploadService.sendOutputs(scrapperResult), 5000)
         })
       }
       return scrapperResult;

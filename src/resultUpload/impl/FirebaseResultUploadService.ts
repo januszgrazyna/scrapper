@@ -7,15 +7,17 @@ import { ScrapperResult } from "../../scrapper/models/ScrapperRun";
 import { setDateFieldsToJsonStr, trimBackingFieldNames } from "../../utils";
 
 export class FirebaseResultUploadService implements IResultUploadService {
-    async add(scrapperResult: ScrapperResult): Promise<void> {
+    
+    async updateResults(scrapperResult: ScrapperResult): Promise<void> {
         const results = admin.firestore().collection("results");
         let scrapperResultData = trimBackingFieldNames(scrapperResult);
         scrapperResultData = setDateFieldsToJsonStr(scrapperResultData)
-        await results.doc(scrapperResult.id).set({
+        await results.doc(scrapperResult.id).update({
             ...scrapperResultData, "results": (scrapperResult.results ? JSON.stringify(scrapperResult.results) : scrapperResult.results)
         })
     }
-    async updateAndSendResults(scrapperResult: ScrapperResult): Promise<void> {
+
+    async sendOutputs(scrapperResult: ScrapperResult): Promise<void> {
         //assuming output directory is set as current directory
         const fullOutputDir = process.cwd()
         if(!fs.existsSync(fullOutputDir)){
@@ -24,16 +26,18 @@ export class FirebaseResultUploadService implements IResultUploadService {
 
         const files = fs.readdirSync(fullOutputDir);
         var bucket = admin.storage().bucket();
-        const results = admin.firestore().collection("results");
         console.log(`Sending ${files.length} files from ${fullOutputDir} into ${scrapperResult.outputDirectory!}`)
         for (const file of files) {            
             await bucket.upload(file, {destination: path.join(scrapperResult.outputDirectory!, path.basename(file))})
         }
+    }
+
+    async add(scrapperResult: ScrapperResult): Promise<void> {
+        const results = admin.firestore().collection("results");
         let scrapperResultData = trimBackingFieldNames(scrapperResult);
         scrapperResultData = setDateFieldsToJsonStr(scrapperResultData)
-        await results.doc(scrapperResult.id).update({
+        await results.doc(scrapperResult.id).set({
             ...scrapperResultData, "results": (scrapperResult.results ? JSON.stringify(scrapperResult.results) : scrapperResult.results)
         })
     }
-
 }
