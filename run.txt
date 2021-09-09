@@ -1,1 +1,1 @@
-9/9/2021 6:28:14 PM: scrap "Allegro" "d17b1233-af5e-4f1a-ae03-09bc35eceb1a" --allegro-advert="true" --allegro-buyNow="true" --allegro-auction="true" --allegro-searchTerm="rtx 2060" --allegro-categoryUrlString="podzespoly-komputerowe-karty-graficzne-260019" 
+9/9/2021 6:29:37 PM: scrap "Allegro" "d17b1233-af5e-4f1a-ae03-09bc35eceb1a" --allegro-advert="true" --allegro-buyNow="true" --allegro-auction="true" --allegro-searchTerm="rtx 2060" --allegro-categoryUrlString="podzespoly-komputerowe-karty-graficzne-260019" 
