@@ -228,8 +228,17 @@ export class AllegroScrapper extends ScrapperImplBase {
         logger.info(`Processed ${result.totalItems} items. Found ${result.foundItems.length}.`)
     }
 
+    private printSearchOptions() {
+        logger.info("Allegro scrapper called with following search options:");
+        var opt = this.searchOptions as any;
+        for (const key in opt) {
+            logger.info(`${key}=${opt[key]}`)
+        }
+    }
+
     async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult, debug: boolean, argv?: any): Promise<void> {
         this.searchOptions = parseScrapperOptions<SearchOptions>("allegro", argv);
+        this.printSearchOptions();
         this.notificationsFacade = notificationsFacade;
         this.scrapperRun = scrapperRun;
         await this.startScrapping(debug);
