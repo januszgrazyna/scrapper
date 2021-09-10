@@ -13,9 +13,7 @@ export async function start(opt: ScrapperOptions = new ScrapperOptions(), argv: 
         logger.error(`Unexepected error raised while running scrapper: ${error}`)
         // @ts-ignore
         logger.error(`${error.stack}`)
-        throw error
-    }
-    finally{
         stopLogger()
+        throw error
     }
 }

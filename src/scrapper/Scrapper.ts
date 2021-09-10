@@ -56,7 +56,6 @@ export default class Scrapper {
       logger.info(`Scrapper ${impl.id} starting in ${this.outputDir} directory`)
 
       try {
-        logger.debug(`Adding new result with id ${scrapperResult.id}`)
         await this.resultUploadService.add(scrapperResult)
         scrapperResult.outputDirectory = this.outputDir!;
         const results = await impl.start(new NotificationsFacade(
@@ -66,6 +65,7 @@ export default class Scrapper {
         ), scrapperResult, this.options.debug, this.argv);
         scrapperResult.results = results;
         scrapperResult.setFinished()
+        logger.info('Scrapper succesfully finished')
       } catch (error) {
         scrapperResult.setFailed()
         logger.error(`Error raised while running scrapper ${impl.id}: ${error}`)
@@ -74,11 +74,17 @@ export default class Scrapper {
       }
       finally{
         await this.resultUploadService.updateResults(scrapperResult);
-        logger.on('finish', async () => {
-          setTimeout(async () => await this.resultUploadService.sendOutputs(scrapperResult), 5000)
-        })
+        this.sendOutputs(scrapperResult)
       }
       return scrapperResult;
+    }
+
+    private sendOutputs(scrapperResult: ScrapperResult) {
+      logger.on('finish', async () => {
+        setTimeout(async () => await this.resultUploadService.sendOutputs(scrapperResult), 5000)
+      })
+      logger.debug(`Sending files from ${process.cwd()} into ${scrapperResult.outputDirectory!}`)
+      stopLogger()
     }
 
     async stop() {

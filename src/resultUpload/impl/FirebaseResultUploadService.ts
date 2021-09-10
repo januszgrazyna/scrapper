@@ -5,10 +5,12 @@ import { admin } from "../../firebase";
 import * as path from "path";
 import { ScrapperResult } from "../../scrapper/models/ScrapperRun";
 import { setDateFieldsToJsonStr, trimBackingFieldNames } from "../../utils";
+import { logger } from '../../Logging';
 
 export class FirebaseResultUploadService implements IResultUploadService {
     
     async updateResults(scrapperResult: ScrapperResult): Promise<void> {
+        logger.debug(`Updating result with id ${scrapperResult.id}`)
         const results = admin.firestore().collection("results");
         let scrapperResultData = trimBackingFieldNames(scrapperResult);
         scrapperResultData = setDateFieldsToJsonStr(scrapperResultData)
@@ -26,13 +28,13 @@ export class FirebaseResultUploadService implements IResultUploadService {
 
         const files = fs.readdirSync(fullOutputDir);
         var bucket = admin.storage().bucket();
-        console.log(`Sending ${files.length} files from ${fullOutputDir} into ${scrapperResult.outputDirectory!}`)
         for (const file of files) {            
             await bucket.upload(file, {destination: path.join(scrapperResult.outputDirectory!, path.basename(file))})
         }
     }
 
     async add(scrapperResult: ScrapperResult): Promise<void> {
+        logger.debug(`Adding result with id ${scrapperResult.id}`)
         const results = admin.firestore().collection("results");
         let scrapperResultData = trimBackingFieldNames(scrapperResult);
         scrapperResultData = setDateFieldsToJsonStr(scrapperResultData)
