@@ -1,4 +1,4 @@
-import { ScrapperResult } from "../scrapper/models/ScrapperRun";
+import { ScrapperResult } from "../scrapper/models/ScrapperResult";
 
 
 export interface IResultUploadService {

@@ -1,6 +1,6 @@
 import { NotificationModel } from "../notifications/models/NotificationModel";
 import NotificationsFacade from "../notifications/NotificationsFacade";
-import { ScrapperResult } from "./models/ScrapperRun";
+import { ScrapperResult } from "./models/ScrapperResult";
 
 export function parseScrapperOptions<T>(type: string, argv: any){
     const opt: any = {};    

@@ -9,7 +9,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { Item } from "./Item";
 import { SearchOptions } from "./SearchOptions";
 import { sleep } from "../../../utils";
-import { ScrapperResult } from "../../models/ScrapperRun";
+import { ScrapperResult } from "../../models/ScrapperResult";
 
 
 interface AllegroResult{

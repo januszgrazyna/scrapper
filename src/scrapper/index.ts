@@ -1,7 +1,7 @@
 import Scrapper from "./Scrapper";
 import { ScrapperOptions } from "./models/ScrapperOptions";
 import { logger, stopLogger } from '../Logging';
-import { ScrapperResult } from "./models/ScrapperRun";
+import { ScrapperResult } from "./models/ScrapperResult";
 import * as CompositionRoot from '../CompositionRoot';
 
 

@@ -6,7 +6,7 @@ import { ScrapperOptions } from './models/ScrapperOptions';
 import * as fs from "fs";
 import * as path from "path";
 import { IResultUploadService } from '../resultUpload/IResultUploadService';
-import { ScrapperResult } from './models/ScrapperRun';
+import { ScrapperResult } from './models/ScrapperResult';
 import * as CompositionRoot from '../CompositionRoot';
 
 

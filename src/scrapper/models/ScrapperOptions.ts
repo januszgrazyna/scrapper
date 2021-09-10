@@ -1,4 +1,4 @@
-import { RunConfigurationId } from "./ScrapperRun";
+import { RunConfigurationId } from "./ScrapperResult";
 
 export class ScrapperOptions {
     type: string = "Default";

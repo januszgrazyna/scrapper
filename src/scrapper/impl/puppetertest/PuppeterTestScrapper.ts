@@ -7,7 +7,7 @@ import { NotificationModel } from "../../../notifications/models/NotificationMod
 import NotificationsFacade from "../../../notifications/NotificationsFacade";
 import HumanizePlugin from '@extra/humanize';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import { ScrapperResult } from "../../models/ScrapperRun";
+import { ScrapperResult } from "../../models/ScrapperResult";
 
 
 export class PuppeterTestScrapper extends ScrapperImplBase {
