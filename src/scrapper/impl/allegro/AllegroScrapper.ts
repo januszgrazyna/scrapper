@@ -12,12 +12,12 @@ import { sleep } from "../../../utils";
 import { ScrapperResult } from "../../models/ScrapperResult";
 
 
-interface AllegroResult{
+interface AllegroResultData{
     totalItems: number;
     foundItems: Item[];
 }
 
-interface FailedAllegroResult{
+interface FailedAllegroResultData{
     errorDescription: string | null;
 }
 
@@ -221,7 +221,7 @@ export class AllegroScrapper extends ScrapperImplBase {
             } catch (error) {
                 await page.screenshot({ path: 'error.png' });
                 await browser.close();
-                this.scrapperResult!.results = {errorDescription: error} as FailedAllegroResult
+                this.scrapperResult!.resultData = {errorDescription: error} as FailedAllegroResultData
                 throw error;
             }
             finally{
@@ -240,10 +240,10 @@ export class AllegroScrapper extends ScrapperImplBase {
             return {
                 totalItems: allItems.length,
                 foundItems: itemsToSend
-            } as AllegroResult
+            } as AllegroResultData
         };
         const allegroResult = await f();
-        this.scrapperResult!.results = allegroResult;
+        this.scrapperResult!.resultData = allegroResult;
         logger.info(`Processed ${allegroResult.totalItems} items. Found ${allegroResult.foundItems.length}.`)
     }
 

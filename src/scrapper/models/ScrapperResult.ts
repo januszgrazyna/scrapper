@@ -19,7 +19,7 @@ export class ScrapperResult{
     private _outputDirectory: string | null = null;
     private _dateFinished: Date | null = null;
     private _status: ScrapperRunStatus;
-    private _results : any | null = null;
+    private _resultData : any | null = null;
 
     constructor(
         impl: ScrapperImplBase, runConfigurationId: RunConfigurationId
@@ -32,12 +32,12 @@ export class ScrapperResult{
         this._status = "running";
     }
 
-    public get results() : any | null {
-        return this._results;
+    public get resultData() : any | null {
+        return this._resultData;
     }
-    public set results(v : any | null) {
+    public set resultData(v : any | null) {
         v = v ?? null;
-        this._results = v;
+        this._resultData = v;
         this.ensureValid();
     }
     public get status(): ScrapperRunStatus {
@@ -77,7 +77,7 @@ export class ScrapperResult{
     }
 
     public ensureValid(){
-        if(this.results === undefined || this._outputDirectory == null){
+        if(this.resultData === undefined || this._outputDirectory == null){
             throw new Error("ScrapperRun instance is not valid")
         } 
     }

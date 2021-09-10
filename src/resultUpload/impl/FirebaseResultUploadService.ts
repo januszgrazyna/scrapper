@@ -15,7 +15,7 @@ export class FirebaseResultUploadService implements IResultUploadService {
         let scrapperResultTrimmed = trimBackingFieldNames(scrapperResult);
         scrapperResultTrimmed = setDateFieldsToJsonStr(scrapperResultTrimmed)
         await results.doc(scrapperResult.id).update({
-            ...scrapperResultTrimmed, "results": (scrapperResult.results ? JSON.stringify(scrapperResult.results) : scrapperResult.results)
+            ...scrapperResultTrimmed, "resultData" : (scrapperResult.resultData ? JSON.stringify(scrapperResult.resultData) : scrapperResult.resultData)
         })
     }
 
@@ -39,7 +39,7 @@ export class FirebaseResultUploadService implements IResultUploadService {
         let scrapperResultData = trimBackingFieldNames(scrapperResult);
         scrapperResultData = setDateFieldsToJsonStr(scrapperResultData)
         await results.doc(scrapperResult.id).set({
-            ...scrapperResultData, "results": (scrapperResult.results ? JSON.stringify(scrapperResult.results) : scrapperResult.results)
+            ...scrapperResultData, "resultData": (scrapperResult.resultData ? JSON.stringify(scrapperResult.resultData) : scrapperResult.resultData)
         })
     }
 }
