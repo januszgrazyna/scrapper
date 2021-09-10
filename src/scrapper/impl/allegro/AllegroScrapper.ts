@@ -6,7 +6,7 @@ import { NotificationModel } from "../../../notifications/models/NotificationMod
 import NotificationsFacade from "../../../notifications/NotificationsFacade";
 import HumanizePlugin from '@extra/humanize';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import { Item } from "./Item";
+import { Attribute, Item } from "./Item";
 import { SearchOptions } from "./SearchOptions";
 import { sleep } from "../../../utils";
 import { ScrapperResult } from "../../models/ScrapperResult";
@@ -113,7 +113,7 @@ export class AllegroScrapper extends ScrapperImplBase {
                 const dl = article.querySelector("dl");
                 if (dl) {
                     // @ts-ignore
-                    item.attributes = Array.from(dl.children).map((r, i) => (i % 2 == 0 ? { k: r.textContent!, v: dl.children[i + 1].textContent! } : null)).filter(v => v != null);
+                    item.attributes = Array.from(dl.children).map((r, i) => (i % 2 == 0 ? { k: r.textContent!, v: dl.children[i + 1].textContent! } as Attribute : null)).filter(v => v != null);
                 }
 
                 const prices = Array.from(article.querySelectorAll("span"))
