@@ -33,20 +33,20 @@ export class AllegroScrapper extends ScrapperImplBase {
         let link = `https://allegro.pl/kategoria/${opt.categoryUrlString}?string=${encodeURI(opt.searchTerm)}`;
 
         if (opt.priceFrom && opt.priceFrom > 0) {
-            link += `&price_from=${opt.priceFrom}`;
+            link += `&price_from=${encodeURI(opt.priceFrom.toString())}`;
         }
 
         if (opt.auction) {
-            link += `$offerTypeAuction=2`;
+            link += `&offerTypeAuction=2`;
         }
         if (opt.buyNow) {
-            link += `$offerTypeBuyNow=1`;
+            link += `&offerTypeBuyNow=1`;
         }
         if (opt.advert) {
-            link += `$offerTypeAdvert=3`;
+            link += `&offerTypeAdvert=3`;
         }
 
-        link += `&p=${pageNumber}`;
+        link += `&p=${encodeURI(pageNumber.toString())}`;
         // TODO: optional?
         link += `&order=p` //list items in decreasing price order
         logger.debug(`Opening page at ${link}`);
