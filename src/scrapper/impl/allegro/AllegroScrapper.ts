@@ -63,6 +63,14 @@ export class AllegroScrapper extends ScrapperImplBase {
         return page.click('button[data-role=accept-consent]');
     }
 
+    private async tryClickConsentButton(page: Page): Promise<void> {
+        try {
+            await this.clickConsentButton(page);
+        } catch (error) {
+            logger.info("Could not click consent button: " + error);
+        }
+    }
+
     getTotalPages(page: Page): Promise<number> {
         return page.evaluate(() => {
             const totalArr = Array.from(document.querySelectorAll("div a[name='pagination-bottom']+div input")).map(v => v.attributes).filter(v => v.hasOwnProperty("data-maxpage")).map((v: NamedNodeMap) => v.getNamedItem("data-maxpage")?.value);
@@ -163,7 +171,7 @@ export class AllegroScrapper extends ScrapperImplBase {
                 await this.enterItemsPage(this.searchOptions!, page, this.searchOptions!.page);
                 await this.randomSleep()
                 // @ts-ignore 
-                await this.clickConsentButton(page);
+                await this.tryClickConsentButton(page);
 
                 // @ts-ignore 
                 const totalPages = await this.getTotalPages(page);
