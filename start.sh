@@ -8,12 +8,14 @@ if [[ "${FILE_CONTENTS:0:1}" == "?" ]]; then
     exit 0
 fi
 
-CMD=$(echo "$FILE_CONTENTS" | sed -e "s/.*PM:\s*\(.*\)/\1/" | sed -e "s/.*AM:\s*\(.*\)/\1/")
-echo "Command: $CMD"
+ARGS=$(echo "$FILE_CONTENTS" | sed -e "s/.*PM:\s*\(.*\)/\1/" | sed -e "s/.*AM:\s*\(.*\)/\1/")
+echo "Args: $ARGS"
+CMD="node src/index.js $ARGS"
 
 pushd dist 2>&1 > /dev/null
 set -e
-node src/index.js $CMD
+# DANGEROUS PART
+eval "$CMD"
 set +e
 popd 2>&1 > /dev/null
 
