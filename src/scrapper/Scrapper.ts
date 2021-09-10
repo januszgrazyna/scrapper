@@ -6,7 +6,7 @@ import { ScrapperOptions } from './models/ScrapperOptions';
 import * as fs from "fs";
 import * as path from "path";
 import { IResultUploadService } from '../resultUpload/IResultUploadService';
-import { ScrapperResult } from './models/ScrapperRun';
+import { ScrapperResult } from './models/ScrapperResult';
 import * as CompositionRoot from '../CompositionRoot';
 
 
@@ -58,12 +58,11 @@ export default class Scrapper {
       try {
         await this.resultUploadService.add(scrapperResult)
         scrapperResult.outputDirectory = this.outputDir!;
-        const results = await impl.start(new NotificationsFacade(
+        await impl.start(new NotificationsFacade(
           CompositionRoot.notificationSenderService,
           CompositionRoot.notificationsStorageService,
           impl.notificationIdentifierFactory,
         ), scrapperResult, this.options.debug, this.argv);
-        scrapperResult.results = results;
         scrapperResult.setFinished()
         logger.info('Scrapper succesfully finished')
       } catch (error) {

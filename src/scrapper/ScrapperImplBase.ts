@@ -1,6 +1,6 @@
 import { NotificationModel } from "../notifications/models/NotificationModel";
 import NotificationsFacade from "../notifications/NotificationsFacade";
-import { ScrapperResult } from "./models/ScrapperRun";
+import { ScrapperResult } from "./models/ScrapperResult";
 
 export function parseScrapperOptions<T>(type: string, argv: any){
     const opt: any = {};    
@@ -22,5 +22,5 @@ export abstract class ScrapperImplBase{
     }
 
     abstract notificationIdentifierFactory(model: NotificationModel): string;
-    abstract start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult, debug: boolean, argv?: any): Promise<any>;
+    abstract start(notificationsFacade: NotificationsFacade, scrapperResult: ScrapperResult, debug: boolean, argv?: any): Promise<void>;
 }

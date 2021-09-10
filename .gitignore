@@ -11,3 +11,4 @@ outputs/
 test_httpserver/*
 !test_httpserver/allegro_run.sh
 src/dev/
+mapping_gen/

@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ScrapperRunId } from '../../scrapper/models/ScrapperRun';
+import { ScrapperRunId } from '../../scrapper/models/ScrapperResult';
 
 
 export class NotificationModel {

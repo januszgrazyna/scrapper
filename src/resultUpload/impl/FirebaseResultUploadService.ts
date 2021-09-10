@@ -3,7 +3,7 @@ import * as fs from "fs";
 import { deepStrictEqual } from "assert";
 import { admin } from "../../firebase";
 import * as path from "path";
-import { ScrapperResult } from "../../scrapper/models/ScrapperRun";
+import { ScrapperResult } from "../../scrapper/models/ScrapperResult";
 import { setDateFieldsToJsonStr, trimBackingFieldNames } from "../../utils";
 import { logger } from '../../Logging';
 
@@ -12,10 +12,10 @@ export class FirebaseResultUploadService implements IResultUploadService {
     async updateResults(scrapperResult: ScrapperResult): Promise<void> {
         logger.debug(`Updating result with id ${scrapperResult.id}`)
         const results = admin.firestore().collection("results");
-        let scrapperResultData = trimBackingFieldNames(scrapperResult);
-        scrapperResultData = setDateFieldsToJsonStr(scrapperResultData)
+        let scrapperResultTrimmed = trimBackingFieldNames(scrapperResult);
+        scrapperResultTrimmed = setDateFieldsToJsonStr(scrapperResultTrimmed)
         await results.doc(scrapperResult.id).update({
-            ...scrapperResultData, "results": (scrapperResult.results ? JSON.stringify(scrapperResult.results) : scrapperResult.results)
+            ...scrapperResultTrimmed, "resultData" : (scrapperResult.resultData ? JSON.stringify(scrapperResult.resultData) : scrapperResult.resultData)
         })
     }
 
@@ -39,7 +39,7 @@ export class FirebaseResultUploadService implements IResultUploadService {
         let scrapperResultData = trimBackingFieldNames(scrapperResult);
         scrapperResultData = setDateFieldsToJsonStr(scrapperResultData)
         await results.doc(scrapperResult.id).set({
-            ...scrapperResultData, "results": (scrapperResult.results ? JSON.stringify(scrapperResult.results) : scrapperResult.results)
+            ...scrapperResultData, "resultData": (scrapperResult.resultData ? JSON.stringify(scrapperResult.resultData) : scrapperResult.resultData)
         })
     }
 }

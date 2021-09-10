@@ -1,3 +1,9 @@
+export interface Attribute 
+{ 
+    k: string; 
+    v: string; 
+};
+
 export interface Item {
     buyNow?: boolean;
     auction?: boolean;
@@ -5,6 +11,6 @@ export interface Item {
     price?: number;
     priceStr?: string;
     title?: string;
-    attributes?: { k: string; v: string; }[];
+    attributes?: Attribute[];
     link?: string;
 }

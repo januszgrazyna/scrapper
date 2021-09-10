@@ -6,17 +6,26 @@ import { NotificationModel } from "../../../notifications/models/NotificationMod
 import NotificationsFacade from "../../../notifications/NotificationsFacade";
 import HumanizePlugin from '@extra/humanize';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import { Item } from "./Item";
+import { Attribute, Item } from "./Item";
 import { SearchOptions } from "./SearchOptions";
 import { sleep } from "../../../utils";
-import { ScrapperResult } from "../../models/ScrapperRun";
+import { ScrapperResult } from "../../models/ScrapperResult";
 
+
+interface AllegroResultData{
+    totalItems: number;
+    foundItems: Item[];
+}
+
+interface FailedAllegroResultData{
+    errorDescription: string | null;
+}
 
 export class AllegroScrapper extends ScrapperImplBase {
     private interval: any;
     private searchOptions?: SearchOptions;
     private notificationsFacade?: NotificationsFacade;
-    private scrapperRun?: ScrapperResult;
+    private scrapperResult?: ScrapperResult;
 
     constructor() {
         super("Allegro");
@@ -77,7 +86,7 @@ export class AllegroScrapper extends ScrapperImplBase {
             if (totalArr.length > 0) {
                 return Number.parseInt(totalArr[0]!);
             } else {
-                throw new Error("cannot get total");
+                throw new Error("Cannot get number of pages");
             }
         });
     }
@@ -104,7 +113,7 @@ export class AllegroScrapper extends ScrapperImplBase {
                 const dl = article.querySelector("dl");
                 if (dl) {
                     // @ts-ignore
-                    item.attributes = Array.from(dl.children).map((r, i) => (i % 2 == 0 ? { k: r.textContent!, v: dl.children[i + 1].textContent! } : null)).filter(v => v != null);
+                    item.attributes = Array.from(dl.children).map((r, i) => (i % 2 == 0 ? { k: r.textContent!, v: dl.children[i + 1].textContent! } as Attribute : null)).filter(v => v != null);
                 }
 
                 const prices = Array.from(article.querySelectorAll("span"))
@@ -133,7 +142,7 @@ export class AllegroScrapper extends ScrapperImplBase {
         await sleep(randomSleep)
     }
 
-    private async startScrapping(debug: boolean) {
+    private async runScrapper(debug: boolean) {
         let repeatCount = 0;
         const f = async () => {
             let allItems: Item[] = []
@@ -195,7 +204,7 @@ export class AllegroScrapper extends ScrapperImplBase {
                         if (this.searchOptions!.notificationExpr && eval(`(${this.searchOptions!.notificationExpr})`)) {
                             const title = '[Allegro] Found item with price: ' + item.price;
                             const body = item.title!;
-                            const notification = new NotificationModel(this.scrapperRun?.id!, title, body);
+                            const notification = new NotificationModel(this.scrapperResult?.id!, title, body);
 
                             notification.url = item.link!;
                             notificationsToSend.push(notification)
@@ -212,6 +221,7 @@ export class AllegroScrapper extends ScrapperImplBase {
             } catch (error) {
                 await page.screenshot({ path: 'error.png' });
                 await browser.close();
+                this.scrapperResult!.resultData = {errorDescription: error} as FailedAllegroResultData
                 throw error;
             }
             finally{
@@ -230,10 +240,11 @@ export class AllegroScrapper extends ScrapperImplBase {
             return {
                 totalItems: allItems.length,
                 foundItems: itemsToSend
-            } as AllegroResult
+            } as AllegroResultData
         };
-        const result = await f();
-        logger.info(`Processed ${result.totalItems} items. Found ${result.foundItems.length}.`)
+        const allegroResult = await f();
+        this.scrapperResult!.resultData = allegroResult;
+        logger.info(`Processed ${allegroResult.totalItems} items. Found ${allegroResult.foundItems.length}.`)
     }
 
     private printSearchOptions() {
@@ -244,20 +255,15 @@ export class AllegroScrapper extends ScrapperImplBase {
         }
     }
 
-    async start(notificationsFacade: NotificationsFacade, scrapperRun: ScrapperResult, debug: boolean, argv?: any): Promise<void> {
+    async start(notificationsFacade: NotificationsFacade, scrapperResult: ScrapperResult, debug: boolean, argv?: any): Promise<void> {
         this.searchOptions = parseScrapperOptions<SearchOptions>("allegro", argv);
         this.printSearchOptions();
         this.notificationsFacade = notificationsFacade;
-        this.scrapperRun = scrapperRun;
-        await this.startScrapping(debug);
+        this.scrapperResult = scrapperResult;
+        await this.runScrapper(debug);
     }
 
     notificationIdentifierFactory(model: NotificationModel): string {
         return `[Allegro]${model.title}${model.url}${model.body}`;
     }
-}
-
-interface AllegroResult{
-    totalItems: number;
-    foundItems: Item[];
 }
