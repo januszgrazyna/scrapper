@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npx jest",
     "start-impldownload": "cd buildSrc/dist && node buildSrc/index.js",
-    "build-impldownload": "cd buildSrc && tsc && cp -r ../src/config dist/src/config",
+    "build-impldownload": "tsc --build ./buildSrc/tsconfig.json && cp -r ./src/config ./buildSrc/dist/src/config",
     "clean-impldownload": "rm -rf ./buildSrc/dist",
     "build-dev": "npx tsc --build tsconfig.json && cp run.txt start.sh ./dist && tsc-alias -p tsconfig.json",
     "build": "npx tsc && cp package.json run.txt start.sh ./dist && rm -r ./dist/__tests__ && (cd dist && yarn install --production --force)",
