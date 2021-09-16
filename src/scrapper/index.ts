@@ -5,10 +5,19 @@ import { ScrapperResult } from "./models/ScrapperResult";
 import * as CompositionRoot from '../CompositionRoot';
 
 
-export async function start(opt: ScrapperOptions = new ScrapperOptions(), argv: any): Promise<ScrapperResult> {
-    let scrapper = new Scrapper(opt, CompositionRoot.resultUploadService, argv);
+export async function start(argv: any): Promise<ScrapperResult> {
+    const debug = argv.debug as boolean
+    if (debug) {
+        process.env['DEBUG'] = "true"
+    }
+    const opt = {
+        type: argv.type as string,
+        runConfigurationId: typeof argv.runConfigurationId == 'string' ? argv.runConfigurationId : (argv.runConfigurationId as Number).toString(),
+        debug: debug
+    } as ScrapperOptions
+    let scrapper = new Scrapper(opt, CompositionRoot.resultUploadService, CompositionRoot.scrapperDescriptorRead, argv);
     try {
-        return await scrapper.start();        
+        return await scrapper.start();
     } catch (error) {
         logger.error(`Unexepected error raised while running scrapper: ${error}`)
         // @ts-ignore
