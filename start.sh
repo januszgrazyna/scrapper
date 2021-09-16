@@ -1,5 +1,6 @@
 #!/bin/bash
 
+pushd dist 2>&1 > /dev/null
 
 FILE_CONTENTS=$(cat ./run.txt)
 
@@ -12,7 +13,6 @@ ARGS=$(echo "$FILE_CONTENTS" | sed -e "s/.*PM:\s*\(.*\)/\1/" | sed -e "s/.*AM:\s
 echo "Args: $ARGS"
 CMD="node src/index.js $ARGS"
 
-pushd dist 2>&1 > /dev/null
 set -e
 # DANGEROUS PART
 eval "$CMD"
