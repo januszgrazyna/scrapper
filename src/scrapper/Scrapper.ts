@@ -10,12 +10,12 @@ import { ScrapperResult } from './models/ScrapperResult';
 import * as CompositionRoot from '../CompositionRoot';
 import { IScrapperDescriptorRead } from './IScrapperDescriptorRead';
 import { ScrapperDescriptor } from './models/ScrapperDescriptor';
-import { createScrapperImplLoader } from './ScrapperImplLoaderFactory';
 
 
 
 export default class Scrapper {
     private outputDir?: string;
+    private scrapperImplLoader = new LocalScrapperImplLoader();
 
     constructor(
         private options: ScrapperOptions,
@@ -37,15 +37,13 @@ export default class Scrapper {
         logger.debug("Cannot find scrapper descriptor with id " + scrapperImplId)
         descriptor = {
           id: this.options.type,
-          loaderType: "local"
         } as ScrapperDescriptor;
       }
 
-      const scrapperImplLoader = createScrapperImplLoader(descriptor);
-      logger.info(`Loading scrapper ${descriptor.id} with loader of type ${descriptor.loaderType}`)
+      logger.info(`Loading scrapper ${descriptor.id} with local loader`)
 
       try {
-        impl = await scrapperImplLoader.load(descriptor);
+        impl = await this.scrapperImplLoader.load(descriptor);
         return impl;
       } catch (error) {
         logger.error(`Cannot load scrapper ${this.options.type}: ${error}`);
