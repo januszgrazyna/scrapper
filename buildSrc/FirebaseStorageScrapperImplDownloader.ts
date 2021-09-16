@@ -1,27 +1,25 @@
-import { ScrapperDescriptor } from "./models/ScrapperDescriptor";
-import { ScrapperImplBase } from "./ScrapperImplBase";
+import { ScrapperDescriptor } from "../src/scrapper/models/ScrapperDescriptor";
 import * as path from "path";
 import * as fs from "fs";
-import { admin } from "../firebase";
-import { IScrapperImplLoaderBase, LocalScrapperImplLoader } from "./LocalScrapperImplLoader";
+import { admin } from "../src/firebase";
 
 
-export class FirebaseStorageScrapperImplLoader implements IScrapperImplLoaderBase {
+export class FirebaseStorageScrapperImplDownloader {
     private readonly implLoaderMainFolder = "implLoader";
-    private localImplLoader = new LocalScrapperImplLoader();
+    private readonly implsFolderName = "impls";
     public static readonly loaderTypeStr = "firebaseStorage";
 
-    private removeImplDir(dirPath: string){ 
+
+    private removeImplDirContent(dirPath: string){ 
         const files = fs.readdirSync(dirPath)
         for (const file of files) {
             fs.unlinkSync(path.join(dirPath, file))
         }
-        fs.rmdirSync(dirPath)
     }
 
-    async load(scrapperDescriptor: ScrapperDescriptor): Promise<ScrapperImplBase> {
+    async download(scrapperDescriptor: ScrapperDescriptor, appRoot: string) {
         const folderPath = this.implLoaderMainFolder + '/' + scrapperDescriptor.id + '/'
-        const implDir = path.join(this.localImplLoader.resolvedImplDirPath, scrapperDescriptor.id);
+        const implDir = path.join(appRoot, this.implsFolderName, scrapperDescriptor.id);
 
         var bucket = admin.storage().bucket();
         if (bucket == null) {
@@ -37,7 +35,7 @@ export class FirebaseStorageScrapperImplLoader implements IScrapperImplLoaderBas
         if(!fs.existsSync(implDir)){
             fs.mkdirSync(implDir)
         }else{
-            this.removeImplDir(implDir)
+            this.removeImplDirContent(implDir)
         }
         for (const file of files) {
             const destinationFile = path.join(implDir, path.basename(file.name));
@@ -45,6 +43,5 @@ export class FirebaseStorageScrapperImplLoader implements IScrapperImplLoaderBas
             await file.download({ destination: destinationFile });
         }
 
-        return this.localImplLoader.load(scrapperDescriptor);
     }
 }
