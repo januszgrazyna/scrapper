@@ -1,7 +1,7 @@
 #!/bin/bash
 
-set -e
 
 npm run build-impldownload
 APPROOT=$(pwd)
-npm run start-impldownload "$APPROOT" "Allegro"
+IFS=$'\n' read -ra arr -d '' <scrapper_download_list.txt
+npm run start-impldownload "$APPROOT" "${arr[@]}"
