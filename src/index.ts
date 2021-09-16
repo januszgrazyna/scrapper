@@ -20,15 +20,7 @@ yargs(hideBin(process.argv))
       })
       .help()
   }, async (argv) => {
-    const debug = argv.debug as boolean
-    if(debug){
-      process.env['DEBUG'] = "true"
-    }
-    const result = await scrapper.start({
-      type: argv.type as string,
-      runConfigurationId: typeof argv.runConfigurationId == 'string' ? argv.runConfigurationId : (argv.runConfigurationId as Number).toString(),
-      debug: debug
-    }, argv);
+    const result = await scrapper.start(argv);
     if(result.status == "failed"){
       exit(1)
     }
