@@ -37,6 +37,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - run: yarn install
+      - run: bash download_scrappers.sh
       - run: yarn run build-dev
       - run: yarn run start-file
         env:
