@@ -1,4 +1,4 @@
-import { FirebaseStorageScrapperImplLoader } from "../src/scrapper/FirebaseStorageScrapperImplLoader"
+import { FirebaseStorageScrapperImplDownloader } from "../buildSrc/FirebaseStorageScrapperImplDownloader";
 import { LocalScrapperImplLoader } from "../src/scrapper/LocalScrapperImplLoader";
 import * as fs from "fs";
 import * as path from "path";
@@ -22,8 +22,8 @@ afterAll(() => {
 
 
 test('', async () => {
-    const loader = new FirebaseStorageScrapperImplLoader();
-
-    const test = await loader.load({id: 'Test', loaderType: 'firebaseStorage' })
-    expect(test).toBeDefined()
+    const loader = new FirebaseStorageScrapperImplDownloader();
+    const implsDir = path.join(process.cwd(), "impls");
+    await loader.download({id: 'Test' }, process.cwd())
+    expect(fs.existsSync(path.join(implsDir, "Test"))).toBeTruthy()
 })
