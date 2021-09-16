@@ -4,9 +4,12 @@ import { INotificationSenderService } from "./notifications/NotificationSenderSe
 import { INotificationsStorageService } from "./notifications/NotificationsStorageService";
 import { FirebaseResultUploadService } from "./resultUpload/impl/FirebaseResultUploadService";
 import { IResultUploadService } from "./resultUpload/IResultUploadService";
+import { FirebaseScrapperDescriptorRead } from "./scrapper/FirebaseScrapperDescriptorRead";
+import { IScrapperDescriptorRead } from "./scrapper/IScrapperDescriptorRead";
 
 const resultUploadService: IResultUploadService = new FirebaseResultUploadService();
 const notificationSenderService: INotificationSenderService = new FirebaseNotificationSenderService();
 const notificationsStorageService: INotificationsStorageService = new FirestoreNotificationsStorageService();
+const scrapperDescriptorRead: IScrapperDescriptorRead = new FirebaseScrapperDescriptorRead("scrapperDescriptors");
 
-export {resultUploadService, notificationSenderService, notificationsStorageService}
+export {resultUploadService, notificationSenderService, notificationsStorageService, scrapperDescriptorRead}

@@ -1,23 +1,26 @@
 import { logger, configureScrapperLogger, stopLogger } from '../Logging';
-import { ScrapperImplBase } from './ScrapperImplBase';
+import { ScrapperImplBase, ScrapperImplId } from './ScrapperImplBase';
 import NotificationsFacade from '../notifications/NotificationsFacade';
-import { ScrapperImplLoader } from './ScrapperImplLoader';
+import { LocalScrapperImplLoader } from './LocalScrapperImplLoader';
 import { ScrapperOptions } from './models/ScrapperOptions';
 import * as fs from "fs";
 import * as path from "path";
 import { IResultUploadService } from '../resultUpload/IResultUploadService';
 import { ScrapperResult } from './models/ScrapperResult';
 import * as CompositionRoot from '../CompositionRoot';
+import { IScrapperDescriptorRead } from './IScrapperDescriptorRead';
+import { ScrapperDescriptor } from './models/ScrapperDescriptor';
+import { createScrapperImplLoader } from './ScrapperImplLoaderFactory';
 
 
 
 export default class Scrapper {
-    private scrapperImplLoader: ScrapperImplLoader = new ScrapperImplLoader();
     private outputDir?: string;
 
     constructor(
         private options: ScrapperOptions,
         private resultUploadService: IResultUploadService,
+        private scrapperDescriptorRead: IScrapperDescriptorRead,
         private argv?: any,
     ) {
       if(!options.runConfigurationId){
@@ -27,9 +30,22 @@ export default class Scrapper {
 
     private async loadImpl(): Promise<ScrapperImplBase> {
       let impl: ScrapperImplBase;
+      const scrapperImplId = this.options.type as ScrapperImplId;
+      let descriptor = await this.scrapperDescriptorRead.getScrapperDescriptor(scrapperImplId);
+
+      if(descriptor == null){
+        logger.debug("Cannot find scrapper descriptor with id " + scrapperImplId)
+        descriptor = {
+          id: this.options.type,
+          loaderType: "local"
+        } as ScrapperDescriptor;
+      }
+
+      const scrapperImplLoader = createScrapperImplLoader(descriptor);
+      logger.info(`Loading scrapper ${descriptor.id} with loader of type ${descriptor.loaderType}`)
 
       try {
-        impl = await this.scrapperImplLoader.load(this.options.type);
+        impl = await scrapperImplLoader.load(descriptor);
         return impl;
       } catch (error) {
         logger.error(`Cannot load scrapper ${this.options.type}: ${error}`);
