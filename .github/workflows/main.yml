@@ -38,6 +38,10 @@ jobs:
             ${{ runner.os }}-yarn-
       - run: yarn install
       - run: bash download_scrappers.sh
+        env:
+          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+          FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+          FIREBASE_STORAGE: ${{ secrets.FIREBASE_STORAGE }}
       - run: yarn run build-dev
       - run: yarn run start-file
         env:
