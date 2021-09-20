@@ -72,11 +72,7 @@ export default class Scrapper {
       try {
         await this.resultUploadService.add(scrapperResult)
         scrapperResult.outputDirectory = this.outputDir!;
-        await impl.start(new NotificationsFacade(
-          CompositionRoot.notificationSenderService,
-          CompositionRoot.notificationsStorageService,
-          impl.notificationIdentifierFactory,
-        ), scrapperResult, this.options.debug, this.argv);
+        await impl.start(CompositionRoot.notificationsFacade, scrapperResult, this.options.debug, this.argv);
         scrapperResult.setFinished()
         logger.info('Scrapper succesfully finished')
       } catch (error) {
