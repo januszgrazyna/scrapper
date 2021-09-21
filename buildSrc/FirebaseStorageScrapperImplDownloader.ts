@@ -44,8 +44,7 @@ export class FirebaseStorageScrapperImplDownloader {
             await file.download({validation: "md5"}, (err, cont) => {
                 console.log("downloaded");
                 console.log(err);
-                console.log(cont.length);
-                
+                console.log(cont.toString());
             })
         }
 
