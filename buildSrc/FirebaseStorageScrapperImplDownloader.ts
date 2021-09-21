@@ -39,11 +39,8 @@ export class FirebaseStorageScrapperImplDownloader {
         }
         for (const file of files) {
             const destinationFile = path.join(implDir, path.basename(file.name));
-            try{
-                await file.download({ destination: destinationFile });
-            }catch(err){
-                await file.download({ destination: destinationFile });
-            }
+            const stream = file.createReadStream();
+            stream.pipe(fs.createWriteStream(destinationFile)).close()
         }
 
     }
