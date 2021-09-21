@@ -1,6 +1,7 @@
 import { FirebaseNotificationSenderService } from "./notifications/impl/FirebaseNotificationSenderService";
 import { FirestoreNotificationsStorageService } from "./notifications/impl/FirestoreNotificationsStorageService";
 import { INotificationSenderService } from "./notifications/NotificationSenderService";
+import NotificationsFacade, { INotificationsFacade } from "./notifications/NotificationsFacade";
 import { INotificationsStorageService } from "./notifications/NotificationsStorageService";
 import { FirebaseResultUploadService } from "./resultUpload/impl/FirebaseResultUploadService";
 import { IResultUploadService } from "./resultUpload/IResultUploadService";
@@ -11,5 +12,6 @@ const resultUploadService: IResultUploadService = new FirebaseResultUploadServic
 const notificationSenderService: INotificationSenderService = new FirebaseNotificationSenderService();
 const notificationsStorageService: INotificationsStorageService = new FirestoreNotificationsStorageService();
 const scrapperDescriptorRead: IScrapperDescriptorRead = new FirebaseScrapperDescriptorRead("scrapperDescriptors");
+const notificationsFacade: INotificationsFacade = new NotificationsFacade(notificationSenderService, notificationsStorageService);
 
-export {resultUploadService, notificationSenderService, notificationsStorageService, scrapperDescriptorRead}
+export {resultUploadService, notificationSenderService, notificationsStorageService, scrapperDescriptorRead, notificationsFacade}

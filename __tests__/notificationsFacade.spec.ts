@@ -17,9 +17,9 @@ test('', async () => {
     notification.title = "test";
     notification.body = "message test";
 
-    const facade = new NotificationsFacade(new FirebaseNotificationSenderService(), service, (_) => "id2");
-    let sent = await facade.sendNotifications([notification]);
+    const facade = new NotificationsFacade(new FirebaseNotificationSenderService(), service);
+    let sent = await facade.sendNotifications([notification], (_) => "id2");
     expect(sent).toBeTruthy();
-    sent = await facade.sendNotifications([notification]);
+    sent = await facade.sendNotifications([notification], (_) => "id2");
     expect(sent).toBeTruthy();
 })

@@ -3,22 +3,23 @@ import { NotificationModel } from "./models/NotificationModel";
 import { INotificationsStorageService } from './NotificationsStorageService';
 import { logger } from '../Logging';
 
-export default class NotificationsFacade {
-    private _notificationIdentifierFactory: (model: NotificationModel) => string = null!;
+export interface INotificationsFacade{
+  sendNotifications(notifications: NotificationModel[], notificationIdentifierFactory: (model: NotificationModel) => string): Promise<boolean>;
+}
+
+export default class NotificationsFacade implements INotificationsFacade {
 
     constructor(
         private notificationSenderService: INotificationSenderService,
         private notificationsStorageService: INotificationsStorageService,
-        notificationIdentifierFactory: (model: NotificationModel) => string,
     ) {
-      this._notificationIdentifierFactory = notificationIdentifierFactory;
     }
 
-    async sendNotifications(notifications: NotificationModel[]): Promise<boolean> {
+    async sendNotifications(notifications: NotificationModel[], notificationIdentifierFactory: (model: NotificationModel) => string): Promise<boolean> {
 
       for (const notification of notifications) {
           if (!notification.notificationIdentifier) {
-          notification.assignnotificationIdentifier(this._notificationIdentifierFactory(notification));
+          notification.assignnotificationIdentifier(notificationIdentifierFactory(notification));
           }
     
           if (await this.notificationsStorageService.getNotificationByNotificationId(notification.notificationIdentifier)) {
