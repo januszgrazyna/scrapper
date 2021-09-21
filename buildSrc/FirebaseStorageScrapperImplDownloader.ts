@@ -32,7 +32,6 @@ export class FirebaseStorageScrapperImplDownloader {
         }
         
         const files = response[0].filter(f => f.name.startsWith(folderPath) && f.name.endsWith("ts") || f.name.endsWith("js"));
-        console.log(files);
         
         if(!fs.existsSync(implDir)){
             fs.mkdirSync(implDir)
@@ -41,9 +40,13 @@ export class FirebaseStorageScrapperImplDownloader {
         }
         for (const file of files) {
             const destinationFile = path.join(implDir, path.basename(file.name));
-            console.log(destinationFile);
             
-            await file.download({destination: destinationFile, validation: "md5"})
+            await file.download({validation: "md5"}, (err, cont) => {
+                console.log("downloaded");
+                console.log(err);
+                console.log(cont.length);
+                
+            })
         }
 
     }
