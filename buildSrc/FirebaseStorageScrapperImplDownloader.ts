@@ -30,9 +30,8 @@ export class FirebaseStorageScrapperImplDownloader {
         if (response[0].length <= 1) {
             throw new Error(`ScrapperImpl ${scrapperDescriptor.id} contains no files in bucket`);
         }
-        
+
         const files = response[0].filter(f => f.name.startsWith(folderPath) && (f.name.endsWith("ts") || f.name.endsWith("js")));
-        
         if(!fs.existsSync(implDir)){
             fs.mkdirSync(implDir)
         }else{
@@ -42,9 +41,7 @@ export class FirebaseStorageScrapperImplDownloader {
         
         for (const file of files) {
             const destinationFile = path.join(implDir, path.basename(file.name));
-            const f = await file.get()
-            
-            await (f[0]).download({validation: false, destination: destinationFile})
+            await file.download({destination: destinationFile, validation: false})
         }
 
     }

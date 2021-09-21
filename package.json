@@ -32,7 +32,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.19",
     "@types/node": "^16.0.0",
-    "@types/puppeteer": "^5.4.2",
+    "@types/puppeteer": "^5.4.4",
     "@types/uuid": "^8.3.0",
     "@types/winston": "^2.4.4",
     "@types/yargs": "^15.0.11",
