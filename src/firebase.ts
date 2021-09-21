@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import * as f from 'firebase/app';
 import admin from 'firebase-admin';
 import * as fs from 'fs';
 
@@ -32,5 +32,6 @@ admin.initializeApp({
   storageBucket: firebaseStorage().storageBucket,
 });
 
-firebase.initializeApp(firebaseConfig());
-export { firebase, admin };
+
+f.initializeApp(firebaseConfig());
+export { f as firebase, admin };
