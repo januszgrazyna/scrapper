@@ -1,4 +1,3 @@
-import * as f from 'firebase/app';
 import admin from 'firebase-admin';
 import * as fs from 'fs';
 
@@ -33,5 +32,4 @@ admin.initializeApp({
 });
 
 
-f.initializeApp(firebaseConfig());
-export { f as firebase, admin };
+export { admin };
