@@ -18,8 +18,6 @@
     "clean-outputs": "rm -rf ./outputs"
   },
   "dependencies": {
-    "automation-extra-plugin": "^4.2.2-next.616",
-    "@extra/humanize": "^4.2.2-next.616",
     "firebase": "^8.7.1",
     "firebase-admin": "^9.10.0",
     "puppeteer": "^10.1.0",
