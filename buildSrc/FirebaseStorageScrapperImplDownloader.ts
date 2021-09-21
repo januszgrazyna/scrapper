@@ -40,7 +40,7 @@ export class FirebaseStorageScrapperImplDownloader {
         for (const file of files) {
             const destinationFile = path.join(implDir, path.basename(file.name));
             fs.closeSync(fs.openSync(destinationFile, 'w'));
-            await file.download({ destination: destinationFile, validation: "md5" });
+            await file.download({ destination: destinationFile, validation: false });
         }
 
     }
