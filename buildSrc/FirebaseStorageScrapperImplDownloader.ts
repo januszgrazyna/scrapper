@@ -38,6 +38,8 @@ export class FirebaseStorageScrapperImplDownloader {
         }else{
             this.removeImplDirContent(implDir)
         }
+        console.log(files);
+        
         for (const file of files) {
             const destinationFile = path.join(implDir, path.basename(file.name));
             
