@@ -18,7 +18,7 @@
     "clean-outputs": "rm -rf ./outputs"
   },
   "dependencies": {
-    "bezier-js": "^4.1.1",
+    "bezier-js": "4.1.0",
     "fast-crc32c": "^2.0.0",
     "firebase": "^9.0.2",
     "firebase-admin": "^9.11.1",
@@ -32,7 +32,7 @@
     "yargs": "^16.2.0"
   },
   "devDependencies": {
-    "@types/bezier-js": "^4.1.0",
+    "@types/bezier-js": "4.1.0",
     "@types/jest": "^26.0.19",
     "@types/node": "^16.0.0",
     "@types/puppeteer": "^5.4.4",
