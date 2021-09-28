@@ -1,6 +1,5 @@
 import { logger, configureScrapperLogger, stopLogger } from '../Logging';
 import { ScrapperImplBase, ScrapperImplId } from './ScrapperImplBase';
-import NotificationsFacade from '../notifications/NotificationsFacade';
 import { LocalScrapperImplLoader } from './LocalScrapperImplLoader';
 import { ScrapperOptions } from './models/ScrapperOptions';
 import * as fs from "fs";

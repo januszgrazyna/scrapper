@@ -7,7 +7,7 @@ export interface INotificationsFacade{
   sendNotifications(notifications: NotificationModel[], notificationIdentifierFactory: (model: NotificationModel) => string): Promise<boolean>;
 }
 
-export default class NotificationsFacade implements INotificationsFacade {
+export class NotificationsFacade implements INotificationsFacade {
 
     constructor(
         private notificationSenderService: INotificationSenderService,
