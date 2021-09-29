@@ -1,4 +1,4 @@
-import { logger, configureScrapperLogger, stopLogger } from '../Logging';
+import { logger, configureLogger, stopLogger } from '../Logging';
 import { ScrapperImplBase, ScrapperImplId } from './ScrapperImplBase';
 import { LocalScrapperImplLoader } from './LocalScrapperImplLoader';
 import { ScrapperOptions } from './models/ScrapperOptions';
@@ -62,7 +62,7 @@ export default class Scrapper {
     }
 
     async start(): Promise<ScrapperResult> {
-      configureScrapperLogger(this.options.type, this.options.debug);
+      configureLogger(this.options.type, this.options.debug);
       const impl = await this.loadImpl();
       const scrapperResult = new ScrapperResult(impl, this.options.runConfigurationId!)
       this.setOutputDir(impl.id, scrapperResult);

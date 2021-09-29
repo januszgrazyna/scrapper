@@ -5,7 +5,7 @@ const logger = winston.createLogger({
   format: winston.format.json(),
 });
 
-function configureScrapperLogger(scrapperType: string, debug: boolean) {
+function configureLogger(scrapperType: string, debug: boolean) {
   logger.add(new winston.transports.Console({
     format: winston.format.simple(), level: 'debug',
   }));
@@ -24,4 +24,4 @@ function stopLogger() {
   logger.end()
 }
 
-export { logger, configureScrapperLogger, __configureTestLogger, stopLogger };
+export { logger, configureLogger, __configureTestLogger, stopLogger };
