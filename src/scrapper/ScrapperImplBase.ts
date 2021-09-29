@@ -1,4 +1,4 @@
-import { IEmailService } from "@src/emailSend/IEmailService";
+import { IEmailService } from "../emailSend/IEmailService";
 import { NotificationModel } from "../notifications/models/NotificationModel";
 import { INotificationsFacade } from "../notifications/NotificationsFacade";
 import { ScrapperResult } from "./models/ScrapperResult";

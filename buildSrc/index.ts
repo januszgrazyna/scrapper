@@ -16,13 +16,13 @@ const implToDownload = process.argv.slice(3)
 
 const downloader = new FirebaseStorageScrapperImplDownloader();
 (async () => {
+    console.log(`${implToDownload.length} scrappers to download.`);
 
     for (const implId of implToDownload) {
         const descriptor = await scrapperDescriptorRead.getScrapperDescriptor(implId);
         if(!descriptor){
             throw new Error("Cannot find descriptor with id " + implId);
         }
-        console.log('Downloading ' + descriptor.id);
         await downloader.download(descriptor, appRoot)
     }
 })()
