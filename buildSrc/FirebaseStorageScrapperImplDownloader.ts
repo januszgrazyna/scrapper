@@ -41,7 +41,6 @@ export class FirebaseStorageScrapperImplDownloader {
             console.log(`Removing existing content of ${scrapperDescriptor.id}`);
             this.removeImplDirContent(implDir)            
         }
-        console.log(files);
         
         for (const file of files) {
             const destinationFile = path.join(implDir, path.basename(file.name));
