@@ -1,6 +1,5 @@
-import { logger, configureScrapperLogger, stopLogger } from '../Logging';
+import { logger, configureLogger, stopLogger } from '../Logging';
 import { ScrapperImplBase, ScrapperImplId } from './ScrapperImplBase';
-import NotificationsFacade from '../notifications/NotificationsFacade';
 import { LocalScrapperImplLoader } from './LocalScrapperImplLoader';
 import { ScrapperOptions } from './models/ScrapperOptions';
 import * as fs from "fs";
@@ -63,7 +62,7 @@ export default class Scrapper {
     }
 
     async start(): Promise<ScrapperResult> {
-      configureScrapperLogger(this.options.type, this.options.debug);
+      configureLogger(this.options.type, this.options.debug);
       const impl = await this.loadImpl();
       const scrapperResult = new ScrapperResult(impl, this.options.runConfigurationId!)
       this.setOutputDir(impl.id, scrapperResult);
@@ -72,7 +71,7 @@ export default class Scrapper {
       try {
         await this.resultUploadService.add(scrapperResult)
         scrapperResult.outputDirectory = this.outputDir!;
-        await impl.start(CompositionRoot.notificationsFacade, scrapperResult, this.options.debug, this.argv);
+        await impl.start({notificationsFacade: CompositionRoot.notificationsFacade, emailService: CompositionRoot.emailService}, scrapperResult, this.options.debug, this.argv);
         scrapperResult.setFinished()
         logger.info('Scrapper succesfully finished')
       } catch (error) {

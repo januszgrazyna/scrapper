@@ -18,24 +18,28 @@ export class FirebaseStorageScrapperImplDownloader {
     }
 
     async download(scrapperDescriptor: ScrapperDescriptor, appRoot: string) {
-        const folderPath = this.implLoaderMainFolder + '/' + scrapperDescriptor.id + '/'
+        const remoteFolderPath = this.implLoaderMainFolder + '/' + scrapperDescriptor.id + '/'
         const implDir = path.join(appRoot, this.implsFolderName, scrapperDescriptor.id);
+
+        console.log(`Downloading ${scrapperDescriptor.id} from ${remoteFolderPath} into ${implDir}`);
+        
 
         var bucket = admin.storage().bucket();
         if (bucket == null) {
             throw new Error(`ScrapperImpl ${scrapperDescriptor.id} does not exist`);
         }
-        const response = await bucket.getFiles({prefix: folderPath, });
+        const response = await bucket.getFiles({prefix: remoteFolderPath, });
         
         if (response[0].length <= 1) {
             throw new Error(`ScrapperImpl ${scrapperDescriptor.id} contains no files in bucket`);
         }
 
-        const files = response[0].filter(f => f.name.startsWith(folderPath) && (f.name.endsWith("ts") || f.name.endsWith("js")));
+        const files = response[0].filter(f => f.name.startsWith(remoteFolderPath) && (f.name.endsWith("ts") || f.name.endsWith("js")));
         if(!fs.existsSync(implDir)){
             fs.mkdirSync(implDir)
         }else{
-            this.removeImplDirContent(implDir)
+            console.log(`Removing existing content of ${scrapperDescriptor.id}`);
+            this.removeImplDirContent(implDir)            
         }
         console.log(files);
         

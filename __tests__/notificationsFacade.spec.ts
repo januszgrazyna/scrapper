@@ -1,6 +1,6 @@
 import { FirebaseNotificationSenderService } from "../src/notifications/impl/FirebaseNotificationSenderService";
 import { NotificationModel } from "../src/notifications/models/NotificationModel";
-import NotificationsFacade from "../src/notifications/NotificationsFacade";
+import { NotificationsFacade } from "../src/notifications/NotificationsFacade";
 import { FirestoreNotificationsStorageService } from "../src/notifications/impl/FirestoreNotificationsStorageService";
 import { clearFirestoreCollection } from "./utils/firestoreTestUtils";
 import { __configureTestLogger } from '../src/Logging'

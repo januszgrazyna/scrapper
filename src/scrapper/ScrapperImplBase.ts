@@ -1,3 +1,4 @@
+import { IEmailService } from "../emailSend/IEmailService";
 import { NotificationModel } from "../notifications/models/NotificationModel";
 import { INotificationsFacade } from "../notifications/NotificationsFacade";
 import { ScrapperResult } from "./models/ScrapperResult";
@@ -15,6 +16,11 @@ export function parseScrapperOptions<T>(type: string, argv: any){
 
 export type ScrapperImplId = string;
 
+export interface ExternalServices{
+    notificationsFacade: INotificationsFacade;
+    emailService: IEmailService;
+}
+
 export abstract class ScrapperImplBase{
     readonly id: ScrapperImplId;
     constructor(implId: ScrapperImplId){
@@ -22,5 +28,5 @@ export abstract class ScrapperImplBase{
     }
 
     abstract notificationIdentifierFactory(model: NotificationModel): string;
-    abstract start(notificationsFacade: INotificationsFacade, scrapperResult: ScrapperResult, debug: boolean, argv?: any): Promise<void>;
+    abstract start(externalServices: ExternalServices, scrapperResult: ScrapperResult, debug: boolean, argv?: any): Promise<void>;
 }
