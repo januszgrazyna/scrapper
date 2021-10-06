@@ -1,4 +1,4 @@
-import { logger, configureLogger, stopLogger } from '../Logging';
+import { logger, configureLogger, stopLogger, configureCwdInfoLogger } from '../Logging';
 import { ScrapperImplBase, ScrapperImplId } from './ScrapperImplBase';
 import { LocalScrapperImplLoader } from './LocalScrapperImplLoader';
 import { ScrapperOptions } from './models/ScrapperOptions';
@@ -51,21 +51,21 @@ export default class Scrapper {
     }
 
     
-    private setOutputDir(scrapperType: string, scrapperRun: ScrapperResult){
+    private setOutputDir(scrapperResult: ScrapperResult){
       if(!fs.existsSync("outputs")){
           fs.mkdirSync("outputs");
       }
-      const dir = this.outputDir = path.join("outputs", scrapperRun.id);
+      const dir = this.outputDir = path.join("outputs", scrapperResult.id);
       fs.mkdirSync(dir)
       process.chdir(dir)
-      logger.info(`Scraper ${scrapperType} starting in ${dir}`)
     }
 
     async start(): Promise<ScrapperResult> {
-      configureLogger(this.options.type, this.options.debug);
+      configureLogger();
       const impl = await this.loadImpl();
       const scrapperResult = new ScrapperResult(impl, this.options.runConfigurationId!)
-      this.setOutputDir(impl.id, scrapperResult);
+      this.setOutputDir(scrapperResult);
+      configureCwdInfoLogger();
       logger.info(`Scrapper ${impl.id} starting in ${this.outputDir} directory`)
 
       try {
@@ -81,18 +81,16 @@ export default class Scrapper {
         logger.error(`${error.stack}`)
       }
       finally{
-        await this.resultUploadService.updateResults(scrapperResult);
-        this.sendOutputs(scrapperResult)
+        this.updateResultsAndSendOutputs(scrapperResult)
       }
       return scrapperResult;
     }
 
-    private sendOutputs(scrapperResult: ScrapperResult) {
-      logger.on('finish', async () => {
-        setTimeout(async () => await this.resultUploadService.sendOutputs(scrapperResult), 5000)
-      })
+    private async updateResultsAndSendOutputs(scrapperResult: ScrapperResult): Promise<void> {
+      await this.resultUploadService.updateResults(scrapperResult);
       logger.debug(`Sending files from ${process.cwd()} into ${scrapperResult.outputDirectory!}`)
       stopLogger()
+      await this.resultUploadService.sendOutputs(scrapperResult);
     }
 
     async stop() {
