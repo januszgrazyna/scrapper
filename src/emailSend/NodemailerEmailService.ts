@@ -5,30 +5,29 @@ import * as fs from 'fs';
 import { IEmailService } from './IEmailService';
 
 
-export class MailtrapEmailService implements IEmailService {
-    private static readonly MailTrapAuthEnvVar = "MAILTRAP_AUTH";
+export class NodemailerEmailService implements IEmailService {
     private transport?: nodemailer.Transporter;
 
+    constructor(private authFilepath: string, private authEnvVar: string){
+    }
+
     private async loadSecrets(){
-        const filepath = path.join(process.cwd(), 'src', 'dev', 'mailtrapSecrets.json');
+        const envVar = process.env[this.authEnvVar]
+        if(envVar){
+            return JSON.parse(envVar.toString()) 
+        }
+        const filepath = path.join(process.cwd(), this.authFilepath);
         if(fs.existsSync(filepath)){
-          return JSON.parse(fs.readFileSync(filepath, "utf-8"))
+            return JSON.parse(fs.readFileSync(filepath, "utf-8"))
+        }else{
+            throw new Error(`File ${filepath} not found`);
         }
-        const envVar = process.env[MailtrapEmailService.MailTrapAuthEnvVar]
-        if(!envVar){
-          throw new Error(`Cannot find ${MailtrapEmailService.MailTrapAuthEnvVar} variable`)
-        }
-        return JSON.parse(envVar.toString())
     }
 
     private async tryInitMailtrapTransport() {
         if (!this.transport) {
             const mailtrapSecrets = await this.loadSecrets();
-            this.transport = nodemailer.createTransport({
-                host: "smtp.mailtrap.io",
-                port: 2525,
-                auth: mailtrapSecrets.auth
-            });
+            this.transport = nodemailer.createTransport(mailtrapSecrets);
         }
     }
 

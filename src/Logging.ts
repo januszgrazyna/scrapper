@@ -1,16 +1,23 @@
 import winston from 'winston';
+import * as path from 'path';
 
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
 });
 
-function configureLogger(scrapperType: string, debug: boolean) {
+function configureLogger() {
   logger.add(new winston.transports.Console({
     format: winston.format.simple(), level: 'debug',
   }));
   logger.add(new winston.transports.File({
-    filename: 'info.log', level: 'info',
+    filename: 'debug.log', level: 'debug',
+  }))
+}
+
+function configureCwdInfoLogger(){
+  logger.add(new winston.transports.File({
+    filename: path.join(process.cwd(), 'info.log'), level: 'info',
   }))
 }
 
@@ -22,6 +29,7 @@ function __configureTestLogger(){
 
 function stopLogger() {
   logger.end()
+  logger.close();
 }
 
-export { logger, configureLogger, __configureTestLogger, stopLogger };
+export { logger, configureLogger, __configureTestLogger, stopLogger, configureCwdInfoLogger };

@@ -1,5 +1,5 @@
 import { IEmailService, GenericEmailServiceValidationDecorator } from "./emailSend/IEmailService";
-import { MailtrapEmailService } from "./emailSend/MailtrapEmailService";
+import { NodemailerEmailService } from "./emailSend/NodemailerEmailService";
 import { FirebaseNotificationSenderService } from "./notifications/impl/FirebaseNotificationSenderService";
 import { FirestoreNotificationsStorageService } from "./notifications/impl/FirestoreNotificationsStorageService";
 import { INotificationSenderService } from "./notifications/NotificationSenderService";
@@ -9,12 +9,13 @@ import { FirebaseResultUploadService } from "./resultUpload/impl/FirebaseResultU
 import { IResultUploadService } from "./resultUpload/IResultUploadService";
 import { FirebaseScrapperDescriptorRead } from "./scrapper/FirebaseScrapperDescriptorRead";
 import { IScrapperDescriptorRead } from "./scrapper/IScrapperDescriptorRead";
+import * as path from 'path';
 
 const resultUploadService: IResultUploadService = new FirebaseResultUploadService();
 const notificationSenderService: INotificationSenderService = new FirebaseNotificationSenderService();
 const notificationsStorageService: INotificationsStorageService = new FirestoreNotificationsStorageService();
 const scrapperDescriptorRead: IScrapperDescriptorRead = new FirebaseScrapperDescriptorRead("scrapperDescriptors");
 const notificationsFacade: INotificationsFacade = new NotificationsFacade(notificationSenderService, notificationsStorageService);
-const emailService: IEmailService = new GenericEmailServiceValidationDecorator(new MailtrapEmailService());
+const emailService: IEmailService = new GenericEmailServiceValidationDecorator(new NodemailerEmailService(path.join('src', 'dev', 'mailtrapSecrets.json'), "MAILTRAP_AUTH"));
 
 export {resultUploadService, notificationSenderService, notificationsStorageService, scrapperDescriptorRead, notificationsFacade, emailService}

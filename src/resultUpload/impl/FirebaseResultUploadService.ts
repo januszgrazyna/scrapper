@@ -21,15 +21,16 @@ export class FirebaseResultUploadService implements IResultUploadService {
 
     async sendOutputs(scrapperResult: ScrapperResult): Promise<void> {
         //assuming output directory is set as current directory
-        const fullOutputDir = process.cwd()
-        if(!fs.existsSync(fullOutputDir)){
-            throw new Error(`Output directory ${fullOutputDir} doesn't exist`);
+        const outputDir = process.cwd()
+        if(!fs.existsSync(outputDir)){
+            throw new Error(`Output directory ${outputDir} doesn't exist`);
         }
 
-        const files = fs.readdirSync(fullOutputDir);
+        const files = fs.readdirSync(outputDir);
         var bucket = admin.storage().bucket();
         for (const file of files) {            
-            await bucket.upload(file, {destination: path.join(scrapperResult.outputDirectory!, path.basename(file))})
+            console.log(file)
+            await bucket.upload(file, {destination: scrapperResult.outputDirectory!.replace(/\\/g, "/") + "/" + path.basename(file)})
         }
     }
 
