@@ -9,7 +9,13 @@ import { logger } from '../../Logging';
 
 export class FirebaseResultUploadService implements IResultUploadService {
     
-    private replaceBackwardSlashes(str: string): string{
+    private replaceBackwardSlashes(str: string | null | undefined){
+        if(str == null){
+            return null;
+        }
+        if(str == undefined){
+            return undefined;
+        }
         return str.replace(/\\/g, "/");
     }
 
@@ -19,7 +25,7 @@ export class FirebaseResultUploadService implements IResultUploadService {
         let scrapperResultTrimmed = trimBackingFieldNames(scrapperResult);
         scrapperResultTrimmed = setDateFieldsToJsonStr(scrapperResultTrimmed)
         await results.doc(scrapperResult.id).update({
-            ...scrapperResultTrimmed, "outputDirectory": this.replaceBackwardSlashes(scrapperResult.outputDirectory!), 
+            ...scrapperResultTrimmed, "outputDirectory": this.replaceBackwardSlashes(scrapperResult.outputDirectory), 
             "resultData" : (scrapperResult.resultData ? JSON.stringify(scrapperResult.resultData) : scrapperResult.resultData)
         })
     }
@@ -45,7 +51,7 @@ export class FirebaseResultUploadService implements IResultUploadService {
         let scrapperResultData = trimBackingFieldNames(scrapperResult);
         scrapperResultData = setDateFieldsToJsonStr(scrapperResultData)
         await results.doc(scrapperResult.id).set({
-            ...scrapperResultData, "outputDirectory": this.replaceBackwardSlashes(scrapperResult.outputDirectory!), 
+            ...scrapperResultData, "outputDirectory": this.replaceBackwardSlashes(scrapperResult.outputDirectory), 
             "resultData": (scrapperResult.resultData ? JSON.stringify(scrapperResult.resultData) : scrapperResult.resultData)
         })
     }
