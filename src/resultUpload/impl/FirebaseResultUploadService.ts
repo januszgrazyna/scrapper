@@ -9,13 +9,18 @@ import { logger } from '../../Logging';
 
 export class FirebaseResultUploadService implements IResultUploadService {
     
+    private replaceBackwardSlashes(str: string): string{
+        return str.replace(/\\/g, "/");
+    }
+
     async updateResults(scrapperResult: ScrapperResult): Promise<void> {
         logger.debug(`Updating result with id ${scrapperResult.id}`)
         const results = admin.firestore().collection("results");
         let scrapperResultTrimmed = trimBackingFieldNames(scrapperResult);
         scrapperResultTrimmed = setDateFieldsToJsonStr(scrapperResultTrimmed)
         await results.doc(scrapperResult.id).update({
-            ...scrapperResultTrimmed, "resultData" : (scrapperResult.resultData ? JSON.stringify(scrapperResult.resultData) : scrapperResult.resultData)
+            ...scrapperResultTrimmed, "outputDirectory": this.replaceBackwardSlashes(scrapperResult.outputDirectory!), 
+            "resultData" : (scrapperResult.resultData ? JSON.stringify(scrapperResult.resultData) : scrapperResult.resultData)
         })
     }
 
@@ -30,7 +35,7 @@ export class FirebaseResultUploadService implements IResultUploadService {
         var bucket = admin.storage().bucket();
         for (const file of files) {            
             console.log(file)
-            await bucket.upload(file, {destination: scrapperResult.outputDirectory!.replace(/\\/g, "/") + "/" + path.basename(file)})
+            await bucket.upload(file, {destination: this.replaceBackwardSlashes(scrapperResult.outputDirectory!) + "/" + path.basename(file)})
         }
     }
 
@@ -40,7 +45,8 @@ export class FirebaseResultUploadService implements IResultUploadService {
         let scrapperResultData = trimBackingFieldNames(scrapperResult);
         scrapperResultData = setDateFieldsToJsonStr(scrapperResultData)
         await results.doc(scrapperResult.id).set({
-            ...scrapperResultData, "resultData": (scrapperResult.resultData ? JSON.stringify(scrapperResult.resultData) : scrapperResult.resultData)
+            ...scrapperResultData, "outputDirectory": this.replaceBackwardSlashes(scrapperResult.outputDirectory!), 
+            "resultData": (scrapperResult.resultData ? JSON.stringify(scrapperResult.resultData) : scrapperResult.resultData)
         })
     }
 }
