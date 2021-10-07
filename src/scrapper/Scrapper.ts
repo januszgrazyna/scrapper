@@ -75,10 +75,11 @@ export default class Scrapper {
         scrapperResult.setFinished()
         logger.info('Scrapper succesfully finished')
       } catch (error) {
-        scrapperResult.setFailed()
+        // @ts-ignore
         logger.error(`Error raised while running scrapper ${impl.id}: ${error}`)
         // @ts-ignore
         logger.error(`${error.stack}`)
+        scrapperResult.setFailed()
       }
       finally{
         this.updateResultsAndSendOutputs(scrapperResult)
