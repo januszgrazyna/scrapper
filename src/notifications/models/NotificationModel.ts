@@ -1,3 +1,4 @@
+import { ScrapperImplId } from '@src/scrapper/ScrapperImplBase';
 import { v4 as uuidv4 } from 'uuid';
 import { ScrapperResultId } from '../../scrapper/models/ScrapperResult';
 
@@ -12,12 +13,13 @@ export class NotificationModel {
     options?: string;
 
     static fromLiteral(obj: Partial<NotificationModel>): NotificationModel {
-        const newObj = new NotificationModel(obj.scrapperResultId!, obj.title!, obj.body!);
+        const newObj = new NotificationModel(obj.scrapperImplId!, obj.scrapperResultId!, obj.title!, obj.body!);
         const o = Object.assign(newObj, obj);
         return o;
     }
 
     constructor(
+        public scrapperImplId: ScrapperImplId,
         public scrapperResultId: ScrapperResultId, title: string, body: string, public url: string | null = null
     ) {
         this._dateCreated = new Date();
