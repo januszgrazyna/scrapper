@@ -4,7 +4,7 @@ import { INotificationsStorageService } from './NotificationsStorageService';
 import { logger } from '../Logging';
 
 export interface INotificationsFacade{
-  sendNotifications(notifications: NotificationModel[], notificationIdentifierFactory: (model: NotificationModel) => string): Promise<boolean>;
+  sendNotifications(notifications: NotificationModel[]): Promise<boolean>;
 }
 
 export class NotificationsFacade implements INotificationsFacade {
@@ -15,13 +15,9 @@ export class NotificationsFacade implements INotificationsFacade {
     ) {
     }
 
-    async sendNotifications(notifications: NotificationModel[], notificationIdentifierFactory: (model: NotificationModel) => string): Promise<boolean> {
+    async sendNotifications(notifications: NotificationModel[]): Promise<boolean> {
 
-      for (const notification of notifications) {
-          if (!notification.notificationIdentifier) {
-          notification.assignnotificationIdentifier(notificationIdentifierFactory(notification));
-          }
-    
+      for (const notification of notifications) {    
           if (await this.notificationsStorageService.getNotificationByNotificationId(notification.notificationIdentifier)) {
             logger.info(`Notification ${notification.notificationIdentifier} already exists`)
           }else{
