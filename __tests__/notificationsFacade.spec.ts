@@ -21,5 +21,5 @@ test('', async () => {
     let sent = await facade.sendNotifications([notification]);
     expect(sent).toBeTruthy();
     sent = await facade.sendNotifications([notification]);
-    expect(sent).toBeTruthy();
+    expect(sent).toBeFalsy();
 })

@@ -31,7 +31,7 @@ export class FirestoreNotificationsStorageService implements INotificationsStora
 
     async getNotificationByNotificationId(id: string): Promise<NotificationModel | null> {
         const notifications = admin.firestore().collection("notifications");
-        const notification = await notifications.where("_notificationIdentifier", "==", id).get();
+        const notification = await notifications.where("notificationIdentifier", "==", id).get();
         return notification.docs.length > 0 ? NotificationModel.fromLiteral(notification.docs[0].data()) : null;
     }
 }
