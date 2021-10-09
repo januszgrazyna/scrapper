@@ -1,4 +1,4 @@
-import { ScrapperImplId } from '@src/scrapper/ScrapperImplBase';
+import { ScrapperImplId } from '../../scrapper/ScrapperImplBase';
 import { v4 as uuidv4 } from 'uuid';
 import { ScrapperResultId } from '../../scrapper/models/ScrapperResult';
 
