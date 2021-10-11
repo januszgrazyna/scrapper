@@ -1,6 +1,6 @@
 import { ScrapperImplBase, ScrapperImplId } from "../ScrapperImplBase";
 
-export type ScrapperRunId = string;
+export type ScrapperResultId = string;
 
 export type ScrapperRunStatus =
     | "running"
@@ -11,7 +11,7 @@ export type RunConfigurationId = string;
 
 export class ScrapperResult{
     
-    public readonly id: ScrapperRunId;
+    public readonly id: ScrapperResultId;
     public readonly implId: ScrapperImplId;
     public readonly dateCreated: Date;
     public readonly runConfigurationId: RunConfigurationId;

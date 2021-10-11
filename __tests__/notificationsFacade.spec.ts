@@ -13,13 +13,13 @@ afterAll(async () => {
 test('', async () => {
     __configureTestLogger();
     const service = new FirestoreNotificationsStorageService();
-    const notification = new NotificationModel("id", "title", "body");
+    const notification = new NotificationModel("1", "implId" ,"resultId", "title", "body");
     notification.title = "test";
     notification.body = "message test";
 
     const facade = new NotificationsFacade(new FirebaseNotificationSenderService(), service);
-    let sent = await facade.sendNotifications([notification], (_) => "id2");
+    let sent = await facade.sendNotifications([notification]);
     expect(sent).toBeTruthy();
-    sent = await facade.sendNotifications([notification], (_) => "id2");
-    expect(sent).toBeTruthy();
+    sent = await facade.sendNotifications([notification]);
+    expect(sent).toBeFalsy();
 })

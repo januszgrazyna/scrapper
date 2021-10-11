@@ -27,6 +27,5 @@ export abstract class ScrapperImplBase{
         this.id = implId;
     }
 
-    abstract notificationIdentifierFactory(model: NotificationModel): string;
     abstract start(externalServices: ExternalServices, scrapperResult: ScrapperResult, debug: boolean, argv?: any): Promise<void>;
 }
