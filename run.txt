@@ -1,1 +1,1 @@
-10/12/2021 12:44:16 PM: scrap "Allegro" "437bc2e6-b1af-45d6-91ff-f338316135ce" --allegro-advert="true" --allegro-notificationExpr="item.price < 2500" --allegro-searchTerm="rtx 2060" --allegro-categoryUrlString="podzespoly-komputerowe-karty-graficzne-260019" 
+10/12/2021 12:50:03 PM: scrap "GraphicCards" "54e719e3-d95a-4200-b18b-1efb5986b509" --gc-models "gtx 980" --gc-maxPrice="1500" --gc-minPrice="200" --gc-buyNow="true" --gc-advert="true" --gc-notificationExpr="item.price < 1000"
