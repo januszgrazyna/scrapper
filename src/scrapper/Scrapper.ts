@@ -71,7 +71,7 @@ export default class Scrapper {
       try {
         await this.resultUploadService.add(scrapperResult)
         scrapperResult.outputDirectory = this.outputDir!;
-        await impl.start({notificationsFacade: CompositionRoot.notificationsFacade, emailService: CompositionRoot.emailService}, scrapperResult, this.options.debug, this.argv);
+        await impl.start({notificationsFacade: CompositionRoot.notificationsFacade, emailService: CompositionRoot.emailService}, scrapperResult, this.argv);
         scrapperResult.setFinished()
         logger.info('Scrapper succesfully finished')
       } catch (error) {

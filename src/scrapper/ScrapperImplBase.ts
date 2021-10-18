@@ -27,5 +27,5 @@ export abstract class ScrapperImplBase{
         this.id = implId;
     }
 
-    abstract start(externalServices: ExternalServices, scrapperResult: ScrapperResult, debug: boolean, argv?: any): Promise<void>;
+    abstract start(externalServices: ExternalServices, scrapperResult: ScrapperResult, argv?: any): Promise<void>;
 }
