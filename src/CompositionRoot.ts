@@ -5,8 +5,8 @@ import { FirestoreNotificationsStorageService } from "./notifications/impl/Fires
 import { INotificationSenderService } from "./notifications/NotificationSenderService";
 import { INotificationsFacade, NotificationsFacade } from "./notifications/NotificationsFacade";
 import { INotificationsStorageService } from "./notifications/NotificationsStorageService";
-import { FirebaseResultUploadService } from "./resultUpload/impl/FirebaseResultUploadService";
-import { IResultUploadService } from "./resultUpload/IResultUploadService";
+import { FirebaseResultUploadService } from "./results/impl/FirebaseResultUploadService";
+import { IResultUploadService } from "./results/IResultUploadService";
 import { FirebaseScrapperDescriptorRead } from "./scrapper/FirebaseScrapperDescriptorRead";
 import { IScrapperDescriptorRead } from "./scrapper/IScrapperDescriptorRead";
 import * as path from 'path';

@@ -4,7 +4,7 @@ import { LocalScrapperImplLoader } from './LocalScrapperImplLoader';
 import { ScrapperOptions } from './models/ScrapperOptions';
 import * as fs from "fs";
 import * as path from "path";
-import { IResultUploadService } from '../resultUpload/IResultUploadService';
+import { IResultUploadService } from '../results/IResultUploadService';
 import { ScrapperResult } from './models/ScrapperResult';
 import * as CompositionRoot from '../CompositionRoot';
 import { IScrapperDescriptorRead } from './IScrapperDescriptorRead';
