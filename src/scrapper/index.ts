@@ -3,7 +3,7 @@ import { ScrapperOptions } from "./models/ScrapperOptions";
 import { logger, stopLogger } from '../Logging';
 import { ScrapperResult } from "./models/ScrapperResult";
 import * as CompositionRoot from '../CompositionRoot';
-import { _configureEnvironment } from "@src/environment";
+import { _configureEnvironment } from "../environment";
 
 
 export async function start(argv: any): Promise<ScrapperResult> {

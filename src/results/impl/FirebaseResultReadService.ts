@@ -1,4 +1,4 @@
-import { ScrapperResult } from "@src/scrapper/models/ScrapperResult";
+import { ScrapperResult } from "../../scrapper/models/ScrapperResult";
 import { IResultReadService } from "../IResultReadService";
 import { admin } from "../../firebase";
 
