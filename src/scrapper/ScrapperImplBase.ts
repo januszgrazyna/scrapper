@@ -1,3 +1,4 @@
+import { IResultReadService } from "@src/results/IResultReadService";
 import { IEmailService } from "../emailSend/IEmailService";
 import { NotificationModel } from "../notifications/models/NotificationModel";
 import { INotificationsFacade } from "../notifications/NotificationsFacade";
@@ -19,6 +20,7 @@ export type ScrapperImplId = string;
 export interface ExternalServices{
     notificationsFacade: INotificationsFacade;
     emailService: IEmailService;
+    resultReadService: IResultReadService;
 }
 
 export abstract class ScrapperImplBase{
