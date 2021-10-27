@@ -82,16 +82,35 @@ export default class Scrapper {
         scrapperResult.setFailed()
       }
       finally{
-        this.updateResultsAndSendOutputs(scrapperResult)
+        await this.updateResultsAndSendOutputs(scrapperResult)
       }
       return scrapperResult;
     }
 
     private async updateResultsAndSendOutputs(scrapperResult: ScrapperResult): Promise<void> {
-      await this.resultUploadService.updateResults(scrapperResult);
+      try {
+        await this.resultUploadService.updateResults(scrapperResult);
+      } catch (error) {
+        // @ts-ignore
+        logger.error(`Error raised while updating scrapper result ${impl.id}: ${error}`)
+        // @ts-ignore
+        logger.error(`${error.stack}`)
+        return;
+      }
+
       logger.debug(`Sending files from ${process.cwd()} into ${scrapperResult.outputDirectory!}`)
       stopLogger()
-      await this.resultUploadService.sendOutputs(scrapperResult);
+
+      try {
+        await this.resultUploadService.sendOutputs(scrapperResult);
+      } catch (error) {
+        //TODO stop only log to file
+        // @ts-ignore
+        console.log(`Error raised while sending output files ${impl.id}: ${error}`)
+        // @ts-ignore
+        console.log(`${error.stack}`)
+        return;
+      }
     }
 
     async stop() {
