@@ -4,7 +4,7 @@ import { LocalScrapperImplLoader } from './LocalScrapperImplLoader';
 import { ScrapperOptions } from './models/ScrapperOptions';
 import * as fs from "fs";
 import * as path from "path";
-import { IResultUploadService } from '../resultUpload/IResultUploadService';
+import { IResultUploadService } from '../results/IResultUploadService';
 import { ScrapperResult } from './models/ScrapperResult';
 import * as CompositionRoot from '../CompositionRoot';
 import { IScrapperDescriptorRead } from './IScrapperDescriptorRead';
@@ -71,7 +71,7 @@ export default class Scrapper {
       try {
         await this.resultUploadService.add(scrapperResult)
         scrapperResult.outputDirectory = this.outputDir!;
-        await impl.start({notificationsFacade: CompositionRoot.notificationsFacade, emailService: CompositionRoot.emailService}, scrapperResult, this.options.debug, this.argv);
+        await impl.start({notificationsFacade: CompositionRoot.notificationsFacade, emailService: CompositionRoot.emailService, resultReadService: CompositionRoot.resultReadService}, scrapperResult, this.argv);
         scrapperResult.setFinished()
         logger.info('Scrapper succesfully finished')
       } catch (error) {

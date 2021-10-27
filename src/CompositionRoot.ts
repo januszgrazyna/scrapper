@@ -5,11 +5,13 @@ import { FirestoreNotificationsStorageService } from "./notifications/impl/Fires
 import { INotificationSenderService } from "./notifications/NotificationSenderService";
 import { INotificationsFacade, NotificationsFacade } from "./notifications/NotificationsFacade";
 import { INotificationsStorageService } from "./notifications/NotificationsStorageService";
-import { FirebaseResultUploadService } from "./resultUpload/impl/FirebaseResultUploadService";
-import { IResultUploadService } from "./resultUpload/IResultUploadService";
+import { FirebaseResultUploadService } from "./results/impl/FirebaseResultUploadService";
+import { IResultUploadService } from "./results/IResultUploadService";
 import { FirebaseScrapperDescriptorRead } from "./scrapper/FirebaseScrapperDescriptorRead";
 import { IScrapperDescriptorRead } from "./scrapper/IScrapperDescriptorRead";
 import * as path from 'path';
+import { FirebaseResultReadService } from "./results/impl/FirebaseResultReadService";
+import { IResultReadService } from "./results/IResultReadService";
 
 const resultUploadService: IResultUploadService = new FirebaseResultUploadService();
 const notificationSenderService: INotificationSenderService = new FirebaseNotificationSenderService();
@@ -17,5 +19,6 @@ const notificationsStorageService: INotificationsStorageService = new FirestoreN
 const scrapperDescriptorRead: IScrapperDescriptorRead = new FirebaseScrapperDescriptorRead("scrapperDescriptors");
 const notificationsFacade: INotificationsFacade = new NotificationsFacade(notificationSenderService, notificationsStorageService);
 const emailService: IEmailService = new GenericEmailServiceValidationDecorator(new NodemailerEmailService(path.join('src', 'dev', 'mailtrapSecrets.json'), "MAILTRAP_AUTH"));
+const resultReadService: IResultReadService = new FirebaseResultReadService();
 
-export {resultUploadService, notificationSenderService, notificationsStorageService, scrapperDescriptorRead, notificationsFacade, emailService}
+export {resultUploadService, resultReadService, notificationSenderService, notificationsStorageService, scrapperDescriptorRead, notificationsFacade, emailService}
