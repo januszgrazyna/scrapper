@@ -66,7 +66,7 @@ export default class Scrapper {
       const scrapperResult = new ScrapperResult(impl, this.options.runConfigurationId!)
       this.setOutputDir(scrapperResult);
       configureCwdInfoLogger();
-      logger.info(`Scrapper ${impl.id} starting in ${this.outputDir} directory`)
+      logger.info(`Scrapper ${impl.id} (${impl.version}) starting in ${this.outputDir} directory`)
 
       try {
         await this.resultUploadService.add(scrapperResult)
