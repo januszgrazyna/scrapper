@@ -25,7 +25,7 @@ export interface ExternalServices{
 
 export abstract class ScrapperImplBase{
     readonly id: ScrapperImplId;
-    constructor(implId: ScrapperImplId){
+    constructor(implId: ScrapperImplId, readonly version: string){
         this.id = implId;
     }
 
