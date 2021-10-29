@@ -113,7 +113,7 @@ export default class Scrapper {
 
     private async tryStopMitmProxy(mitmProxyRunner: MitmProxyRunner): Promise<void>{
       try {
-        const stopSuccess = await mitmProxyRunner.stop(this.options.mitmProxySendResult);
+        const stopSuccess = await mitmProxyRunner.stop(!this.options.mitmProxySendResult);
         if(!stopSuccess){
           console.log('Could not stop mitmproxy');
         }

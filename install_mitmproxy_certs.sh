@@ -1,7 +1,10 @@
 #!/bin/bash
 
-mitmproxy &
-sleep 1
+set -e
+
+mitmdump &
+sleep 5
 kill -s SIGKILL %1
-cp ~/.mitmproxy/mitmproxy-ca-cert.pem /usr/local/share/ca-certificates/extra/
+ls ~/.mitmproxy
+cp ~/.mitmproxy/mitmproxy-ca-cert.pem /usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
 update-ca-certificates
