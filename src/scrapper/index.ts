@@ -14,7 +14,7 @@ export async function start(argv: any): Promise<ScrapperResult> {
         runConfigurationId: typeof argv.runConfigurationId == 'string' ? argv.runConfigurationId : (argv.runConfigurationId as Number).toString(),
         proxyAddr: argv.proxyAddr,
         mitmProxySave: argv.mitmProxySave ? argv.mitmProxySave === "true" : false,
-        mitmProxySendResult: argv.mitmProxySendResult ? argv.mitmProxySendResult === "true" : true,
+        mitmProxySendResult: argv.mitmProxySendResult ? argv.mitmProxySendResult === "true" : false,
     } as ScrapperOptions
     let scrapper = new Scrapper(opt, CompositionRoot.resultUploadService, CompositionRoot.scrapperDescriptorRead, argv);
     try {
