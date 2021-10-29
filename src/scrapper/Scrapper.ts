@@ -72,7 +72,7 @@ export default class Scrapper {
       if(this.options.mitmProxySave){
         mitmProxyRunner = new MitmProxyRunner();
         // treat error as unexpected
-        this.tryStartMitmProxy(mitmProxyRunner);
+        await this.tryStartMitmProxy(mitmProxyRunner);
       }
 
       logger.info(`Scrapper ${impl.id} (${impl.version}) starting in ${this.outputDir} directory`)
@@ -100,9 +100,9 @@ export default class Scrapper {
       return scrapperResult;
     }
 
-    private tryStartMitmProxy(mitmProxyRunner: MitmProxyRunner) {
+    private async tryStartMitmProxy(mitmProxyRunner: MitmProxyRunner): Promise<void> {
       try {
-        mitmProxyRunner.start(this.argv);
+        await mitmProxyRunner.start(this.argv);
         this.options.proxyAddr = this.argv.proxyAddr;
       } catch (error) {
         logger.error("Error while trying to start mitmproxy");
