@@ -9,6 +9,7 @@ import { ScrapperResult } from './models/ScrapperResult';
 import * as CompositionRoot from '../CompositionRoot';
 import { IScrapperDescriptorRead } from './IScrapperDescriptorRead';
 import { ScrapperDescriptor } from './models/ScrapperDescriptor';
+import { MitmProxyRunner } from '../mitmProxyRunner';
 
 
 
@@ -66,6 +67,14 @@ export default class Scrapper {
       const scrapperResult = new ScrapperResult(impl, this.options.runConfigurationId!)
       this.setOutputDir(scrapperResult);
       configureCwdInfoLogger();
+
+      let mitmProxyRunner: MitmProxyRunner | undefined;
+      if(this.options.mitmProxySave){
+        mitmProxyRunner = new MitmProxyRunner();
+        // treat error as unexpected
+        this.tryStartMitmProxy(mitmProxyRunner);
+      }
+
       logger.info(`Scrapper ${impl.id} (${impl.version}) starting in ${this.outputDir} directory`)
 
       try {
@@ -83,8 +92,36 @@ export default class Scrapper {
       }
       finally{
         await this.updateResultsAndSendOutputs(scrapperResult)
+        if(mitmProxyRunner){
+          this.tryStopMitmProxy(mitmProxyRunner);
+        }
       }
+      
       return scrapperResult;
+    }
+
+    private tryStartMitmProxy(mitmProxyRunner: MitmProxyRunner) {
+      try {
+        mitmProxyRunner.start(this.argv);
+        this.options.proxyAddr = this.argv.proxyAddr;
+      } catch (error) {
+        logger.error("Error while trying to start mitmproxy");
+        logger.error(error);
+        throw error;
+      }
+    }
+
+    private tryStopMitmProxy(mitmProxyRunner: MitmProxyRunner){
+      try {
+        const stopSuccess = mitmProxyRunner.stop();
+        if(!stopSuccess){
+          console.log('Could not stop mitmproxy');
+        }
+      } catch (error) {
+        //TODO logging
+        console.log('Error while stopping mitmproxy')
+        console.log(error);
+      }
     }
 
     private async updateResultsAndSendOutputs(scrapperResult: ScrapperResult): Promise<void> {
