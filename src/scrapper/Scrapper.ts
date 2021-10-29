@@ -91,10 +91,10 @@ export default class Scrapper {
         scrapperResult.setFailed()
       }
       finally{
-        await this.updateResultsAndSendOutputs(scrapperResult)
         if(mitmProxyRunner){
           this.tryStopMitmProxy(mitmProxyRunner);
         }
+        await this.updateResultsAndSendOutputs(scrapperResult)
       }
       
       return scrapperResult;
