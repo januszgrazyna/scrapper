@@ -5,4 +5,5 @@ export class ScrapperOptions {
     runConfigurationId: RunConfigurationId | null = null;
     proxyAddr?: string;
     mitmProxySave: boolean = false;
+    mitmProxySendResult: boolean = true;
 }
