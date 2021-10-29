@@ -1,1 +1,1 @@
-10/29/2021 8:23:11 AM: scrap "GraphicCards" "00000000-0000-0000-0000-000000000000" --gc-models "gtx 980" --gc-maxPrice="1500" --gc-minPrice="200" --gc-buyNow="true" --gc-advert="true" --gc-notificationExpr="item.price < 1000" --mitmProxySave=true
+10/29/2021 11:09:01 AM: scrap "GraphicCards" "00000000-0000-0000-0000-000000000000" --gc-models "gtx 980" --gc-maxPrice="1500" --gc-minPrice="200" --gc-buyNow="true" --gc-advert="true" --gc-notificationExpr="item.price < 1000"
