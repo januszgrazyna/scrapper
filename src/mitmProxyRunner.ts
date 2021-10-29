@@ -8,6 +8,12 @@ export class MitmProxyRunner{
     start(argv: any){
         const savePath = path.join(".", "save.mitm");
         this.mitmDumpProcess = child_process.spawn("mitmdump", ["--set", "upstream-cert=false", "--set", "server_replay_kill_extra=true", "--set", "server_replay_nopop=true", "--set" ,"save_stream_file="+"save.mitm"], {detached: true});
+        this.mitmDumpProcess.addListener('exit', (code, sig) => {
+            if(code != 0){
+                console.log('Mitmdump exited with non-zero code');
+                throw new Error('Mitmdump exited with non-zero code');
+            }
+        });
         logger.info(`Mitmdump process is saving traffic to ${savePath}`);
         argv['proxyAddr'] = "http://localhost:8080";
     }
