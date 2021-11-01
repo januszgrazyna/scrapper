@@ -9,6 +9,11 @@ if [[ "${FILE_CONTENTS:0:1}" == "?" ]]; then
     exit 0
 fi
 
+set -e
+Xvfb :99 &
+export DISPLAY=:99
+set +e
+
 ARGS=$(echo "$FILE_CONTENTS" | sed -e "s/.*PM:\s*\(.*\)/\1/" | sed -e "s/.*AM:\s*\(.*\)/\1/")
 echo "Args: $ARGS"
 CMD="node src/index.js $ARGS"
