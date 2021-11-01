@@ -7,7 +7,7 @@ sleep 15
 url=$(curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[] | .public_url')
 
 echo "starting mitmdump"
-mitmdump --set ssl_insecure=true > /dev/null &
+mitmdump -s tls_passthrough.py > /dev/null &
 
 echo "tunnel at $url"
 
