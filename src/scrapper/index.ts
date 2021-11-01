@@ -3,8 +3,7 @@ import { ScrapperOptions } from "./models/ScrapperOptions";
 import { logger, stopLogger } from '../Logging';
 import { ScrapperResult } from "./models/ScrapperResult";
 import * as CompositionRoot from '../CompositionRoot';
-import { _configureEnvironment } from "../environment";
-import { MitmProxyRunner } from "../mitmProxyRunner";
+import { _configureEnvironment, debug } from "../environment";
 
 
 export async function start(argv: any): Promise<ScrapperResult> {
@@ -15,7 +14,12 @@ export async function start(argv: any): Promise<ScrapperResult> {
         proxyAddr: argv.proxyAddr,
         mitmProxySave: argv.mitmProxySave ? argv.mitmProxySave === "true" : false,
         mitmProxySendResult: argv.mitmProxySendResult ? argv.mitmProxySendResult === "true" : false,
+        headless: argv.headless ? argv.headless === "true" : true
     } as ScrapperOptions
+    if(debug && opt.headless && !argv.headless){
+        opt.headless = false;
+    }
+
     let scrapper = new Scrapper(opt, CompositionRoot.resultUploadService, CompositionRoot.scrapperDescriptorRead, argv);
     try {
         return await scrapper.start();
