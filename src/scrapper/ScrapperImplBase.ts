@@ -4,15 +4,27 @@ import { NotificationModel } from "../notifications/models/NotificationModel";
 import { INotificationsFacade } from "../notifications/NotificationsFacade";
 import { ScrapperResult } from "./models/ScrapperResult";
 
+function assignOptValue(opt: any, propName: string, value: any){
+    if(value == "true"){
+        opt[propName] = true;
+    }
+    else if(value == "false"){
+        opt[propName] = false;
+    }
+    else{
+        opt[propName] = value;
+    }
+}
+
 export function parseScrapperOptions<T>(type: string, argv: any){
     const opt: any = {};    
     for(const propName of Object.getOwnPropertyNames(argv)){
         if(type.length > 0 && propName.indexOf(type) == 0 && propName.indexOf('-') != -1){
             const argName = propName.replace(new RegExp(`^${type}-`), "");
-            opt[argName]=argv[propName];
+            assignOptValue(opt, argName, argv[propName]);
         }
         else if(type.length == 0){
-            opt[propName]=argv[propName];
+            assignOptValue(opt, propName, argv[propName]);
         }
     }
     return opt as T;
