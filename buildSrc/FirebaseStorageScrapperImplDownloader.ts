@@ -9,6 +9,7 @@ export class FirebaseStorageScrapperImplDownloader {
     private readonly implsFolderName = "impls";
     public static readonly loaderTypeStr = "firebaseStorage";
 
+    private readonly allowedExtensions: string[] = [".ts", ".js", ".pug", ".json"];
 
     private removeImplDirContent(dirPath: string){ 
         const files = fs.readdirSync(dirPath)
@@ -34,7 +35,7 @@ export class FirebaseStorageScrapperImplDownloader {
             throw new Error(`ScrapperImpl ${scrapperDescriptor.id} contains no files in bucket`);
         }
 
-        const files = response[0].filter(f => f.name.startsWith(remoteFolderPath) && (f.name.endsWith("ts") || f.name.endsWith("js") || f.name.endsWith('pug')));
+        const files = response[0].filter(f => f.name.startsWith(remoteFolderPath) && (this.allowedExtensions.some((ext, i, arr) => f.name.endsWith(ext))));
         if(!fs.existsSync(implDir)){
             fs.mkdirSync(implDir)
         }else{
