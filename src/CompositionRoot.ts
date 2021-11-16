@@ -1,14 +1,14 @@
 import { IEmailService, GenericEmailServiceValidationDecorator } from "./emailSend/IEmailService";
 import { NodemailerEmailService } from "./emailSend/NodemailerEmailService";
-import { FirebaseNotificationSenderService } from "./firebase/FirebaseNotificationSenderService";
+import { FirebaseNotificationSenderService } from "./firebaseServices/FirebaseNotificationSenderService";
 import { INotificationSenderService } from "./notifications/NotificationSenderService";
 import { INotificationsFacade, NotificationsFacade } from "./notifications/NotificationsFacade";
 import { INotificationsStorageService } from "./notifications/NotificationsStorageService";
-import { FirebaseScrapperDescriptorRead } from "./firebase/FirebaseScrapperDescriptorRead";
+import { FirebaseScrapperDescriptorRead } from "./firebaseServices/FirebaseScrapperDescriptorRead";
 import * as path from 'path';
-import { FirebaseResultReadService } from "./firebase/FirebaseResultReadService";
+import { FirebaseResultReadService } from "./firebaseServices/FirebaseResultReadService";
 import { IResultReadService } from "./scrapper/services/IResultReadService";
-import { FirebaseResultUploadService, FirestoreNotificationsStorageService } from "./firebase";
+import { FirebaseResultUploadService, FirestoreNotificationsStorageService } from "./firebaseServices";
 import { IScrapperDescriptorRead } from "./scrapper/services/IScrapperDescriptorRead";
 import { IResultUploadService } from "./scrapper/services/IResultUploadService";
 
