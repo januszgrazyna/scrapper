@@ -1,6 +1,6 @@
 import yargs from "yargs";
 import Scrapper from "../scrapper/Scrapper";
-import { CliOptions } from "../scrapper/models/CliOptions";
+import { ClientOptions } from "../scrapper/models/ClientOptions";
 import { logger, stopLogger } from '../Logging';
 import * as CompositionRoot from '../CompositionRoot';
 import { _configureEnvironment, debug } from "../environment";
@@ -34,7 +34,7 @@ async function scrap(argv: any): Promise<void> {
         mitmProxySave: argv.mitmProxySave ? argv.mitmProxySave === "true" : false,
         mitmProxySendResult: argv.mitmProxySendResult ? argv.mitmProxySendResult === "true" : false,
         headless: argv.headless ? argv.headless === "true" : true
-    } as CliOptions
+    } as ClientOptions
     if(debug && opt.headless && !argv.headless){
         opt.headless = false;
     }

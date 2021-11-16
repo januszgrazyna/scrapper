@@ -1,17 +1,16 @@
 import { IEmailService, GenericEmailServiceValidationDecorator } from "./emailSend/IEmailService";
 import { NodemailerEmailService } from "./emailSend/NodemailerEmailService";
-import { FirebaseNotificationSenderService } from "./notifications/impl/FirebaseNotificationSenderService";
-import { FirestoreNotificationsStorageService } from "./notifications/impl/FirestoreNotificationsStorageService";
+import { FirebaseNotificationSenderService } from "./firebase/FirebaseNotificationSenderService";
 import { INotificationSenderService } from "./notifications/NotificationSenderService";
 import { INotificationsFacade, NotificationsFacade } from "./notifications/NotificationsFacade";
 import { INotificationsStorageService } from "./notifications/NotificationsStorageService";
-import { FirebaseResultUploadService } from "./results/impl/FirebaseResultUploadService";
-import { IResultUploadService } from "./results/IResultUploadService";
-import { FirebaseScrapperDescriptorRead } from "./scrapper/FirebaseScrapperDescriptorRead";
+import { FirebaseScrapperDescriptorRead } from "./firebase/FirebaseScrapperDescriptorRead";
 import { IScrapperDescriptorRead } from "./scrapper/IScrapperDescriptorRead";
 import * as path from 'path';
-import { FirebaseResultReadService } from "./results/impl/FirebaseResultReadService";
-import { IResultReadService } from "./results/IResultReadService";
+import { FirebaseResultReadService } from "./firebase/FirebaseResultReadService";
+import { IResultReadService } from "./scrapper/IResultReadService";
+import { IResultUploadService } from "./scrapper/IResultUploadService";
+import { FirebaseResultUploadService, FirestoreNotificationsStorageService } from "./firebase";
 
 const resultUploadService: IResultUploadService = new FirebaseResultUploadService();
 const notificationSenderService: INotificationSenderService = new FirebaseNotificationSenderService();

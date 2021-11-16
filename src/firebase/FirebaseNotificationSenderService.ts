@@ -1,6 +1,6 @@
-import { INotificationSenderService } from "../NotificationSenderService";
-import { NotificationModel } from "../models/NotificationModel";
-import { admin } from "../../firebase";
+import { INotificationSenderService } from "../notifications/NotificationSenderService";
+import { NotificationModel } from "../notifications/models/NotificationModel";
+import { admin } from "./firebase";
 
 export class FirebaseNotificationSenderService implements INotificationSenderService {
     static topic = "scrapper";

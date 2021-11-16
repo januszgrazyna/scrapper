@@ -1,9 +1,9 @@
 import * as child_process from "child_process";
 import * as path from "path";
 import * as fs from "fs";
-import { logger } from "./Logging";
+import { logger } from "../Logging";
 import { nextTick } from "process";
-import { sleep } from "./utils";
+import { sleep } from "../utils";
 
 export class MitmProxyRunner{
     private mitmDumpProcess?: child_process.ChildProcessWithoutNullStreams;
