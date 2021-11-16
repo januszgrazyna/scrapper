@@ -1,5 +1,5 @@
 import Scrapper from "./Scrapper";
-import { ScrapperOptions } from "./models/ScrapperOptions";
+import { CliOptions } from "./models/CliOptions";
 import { logger, stopLogger } from '../Logging';
 import { ScrapperResult } from "./models/ScrapperResult";
 import * as CompositionRoot from '../CompositionRoot';
@@ -15,7 +15,7 @@ export async function start(argv: any): Promise<ScrapperResult> {
         mitmProxySave: argv.mitmProxySave ? argv.mitmProxySave === "true" : false,
         mitmProxySendResult: argv.mitmProxySendResult ? argv.mitmProxySendResult === "true" : false,
         headless: argv.headless ? argv.headless === "true" : true
-    } as ScrapperOptions
+    } as CliOptions
     if(debug && opt.headless && !argv.headless){
         opt.headless = false;
     }

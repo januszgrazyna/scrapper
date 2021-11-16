@@ -1,7 +1,7 @@
 import { logger, configureLogger, stopLogger, configureCwdInfoLogger } from '../Logging';
 import { ScrapperImplBase, ScrapperImplId } from './ScrapperImplBase';
 import { LocalScrapperImplLoader } from './LocalScrapperImplLoader';
-import { ScrapperOptions } from './models/ScrapperOptions';
+import { CliOptions } from './models/CliOptions';
 import * as fs from "fs";
 import * as path from "path";
 import { IResultUploadService } from '../results/IResultUploadService';
@@ -18,7 +18,7 @@ export default class Scrapper {
     private scrapperImplLoader = new LocalScrapperImplLoader();
 
     constructor(
-        private options: ScrapperOptions,
+        private options: CliOptions,
         private resultUploadService: IResultUploadService,
         private scrapperDescriptorRead: IScrapperDescriptorRead,
         private argv?: any,

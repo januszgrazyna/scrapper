@@ -1,6 +1,6 @@
 import { RunConfigurationId } from "./ScrapperResult";
 
-export class ScrapperOptions {
+export class CliOptions {
     type: string = "Default";
     runConfigurationId: RunConfigurationId | null = null;
     proxyAddr?: string;
