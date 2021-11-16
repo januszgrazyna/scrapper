@@ -1,12 +1,31 @@
-import Scrapper from "./Scrapper";
-import { CliOptions } from "./models/CliOptions";
+import yargs from "yargs";
+import Scrapper from "../scrapper/Scrapper";
+import { CliOptions } from "../scrapper/models/CliOptions";
 import { logger, stopLogger } from '../Logging';
-import { ScrapperResult } from "./models/ScrapperResult";
 import * as CompositionRoot from '../CompositionRoot';
 import { _configureEnvironment, debug } from "../environment";
+import { exit } from "process";
 
+export function addScrapCommand(yargs: yargs.Argv<{}>): yargs.Argv<{}> {
+    return yargs.command('scrap <type> <runConfigurationId>', 'start scrapper', (yargs) => {
+        yargs
+          .positional('type', {
+            describe: 'scrapper type',
+          })
+          .positional('runConfigurationId', {
+            describe: 'runConfiguration id',
+          })
+          .option('debug', {
+            describe: 'debug',
+            default: false,
+          })
+          .help()
+      }, async (argv) => {
+        await scrap(argv);
+      })
+}
 
-export async function start(argv: any): Promise<ScrapperResult> {
+async function scrap(argv: any): Promise<void> {
     _configureEnvironment(argv.debug as boolean);
     const opt = {
         type: argv.type as string,
@@ -22,7 +41,10 @@ export async function start(argv: any): Promise<ScrapperResult> {
 
     let scrapper = new Scrapper(opt, CompositionRoot.resultUploadService, CompositionRoot.scrapperDescriptorRead, argv);
     try {
-        return await scrapper.start();
+        const result = await scrapper.start();
+        if(result.status == "failed"){
+            exit(1)
+        }
     } catch (error) {
         logger.error(`Unexepected error raised while running scrapper: ${error}`)
         // @ts-ignore
