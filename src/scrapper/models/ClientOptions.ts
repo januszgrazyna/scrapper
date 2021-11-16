@@ -1,10 +1,14 @@
-import { RunConfigurationId } from "./ScrapperResult";
+// prevent 3-valued boolean values
+export const DEFAULT_mitmProxyRemoveResult = false;
+export const DEFAULT_useMitmProxy = false;
+export const DEFAULT_headless = true;
 
 export class ClientOptions {
-    type: string = "Default";
-    runConfigurationId: RunConfigurationId | null = null;
     proxyAddr?: string;
-    headless: boolean = true;
-    mitmProxySave: boolean = false;
-    mitmProxySendResult: boolean = false;
+    headless: boolean = DEFAULT_headless;
+    useMitmProxy: boolean = DEFAULT_useMitmProxy;
+    mitmProxyRemoveResult: boolean = DEFAULT_mitmProxyRemoveResult;
+
+    constructor(public type: string,
+        public labels?: any) { }
 }
