@@ -5,12 +5,12 @@ import { INotificationSenderService } from "./notifications/NotificationSenderSe
 import { INotificationsFacade, NotificationsFacade } from "./notifications/NotificationsFacade";
 import { INotificationsStorageService } from "./notifications/NotificationsStorageService";
 import { FirebaseScrapperDescriptorRead } from "./firebase/FirebaseScrapperDescriptorRead";
-import { IScrapperDescriptorRead } from "./scrapper/IScrapperDescriptorRead";
 import * as path from 'path';
 import { FirebaseResultReadService } from "./firebase/FirebaseResultReadService";
-import { IResultReadService } from "./scrapper/IResultReadService";
-import { IResultUploadService } from "./scrapper/IResultUploadService";
+import { IResultReadService } from "./scrapper/services/IResultReadService";
 import { FirebaseResultUploadService, FirestoreNotificationsStorageService } from "./firebase";
+import { IScrapperDescriptorRead } from "./scrapper/services/IScrapperDescriptorRead";
+import { IResultUploadService } from "./scrapper/services/IResultUploadService";
 
 const resultUploadService: IResultUploadService = new FirebaseResultUploadService();
 const notificationSenderService: INotificationSenderService = new FirebaseNotificationSenderService();

@@ -4,7 +4,7 @@ import { admin } from "./firebase";
 import * as path from "path";
 import { ScrapperResult } from "../scrapper/models/ScrapperResult";
 import { logger } from '../Logging';
-import { IResultUploadService } from "@src/scrapper/IResultUploadService";
+import { IResultUploadService } from "../scrapper/services/IResultUploadService";
 
 function trimBackingFieldNames(obj: any): any{
     const result: any = {}

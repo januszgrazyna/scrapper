@@ -1,4 +1,4 @@
-import { IScrapperDescriptorRead } from "../scrapper/IScrapperDescriptorRead";
+import { IScrapperDescriptorRead } from "../scrapper/services/IScrapperDescriptorRead";
 import { ScrapperDescriptor } from "../scrapper/models/ScrapperDescriptor";
 import { admin } from "./firebase";
 

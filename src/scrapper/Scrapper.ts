@@ -6,10 +6,10 @@ import * as fs from "fs";
 import * as path from "path";
 import { ScrapperResult } from './models/ScrapperResult';
 import * as CompositionRoot from '../CompositionRoot';
-import { IScrapperDescriptorRead } from './IScrapperDescriptorRead';
+import { IScrapperDescriptorRead } from '../scrapper/services/IScrapperDescriptorRead';
 import { ScrapperDescriptor } from './models/ScrapperDescriptor';
 import { MitmProxyRunner } from './mitmProxyRunner';
-import { IResultUploadService } from './IResultUploadService';
+import { IResultUploadService } from '../scrapper/services/IResultUploadService';
 
 
 
