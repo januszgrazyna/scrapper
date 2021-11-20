@@ -11,9 +11,12 @@ export class FirebaseNotificationSenderService implements INotificationSenderSer
                 title: model.title,
                 body: model.body,
                 url: model.url ?? "",
-                id: model.id,
+                scrapperImplId: model.scrapperImplId,
                 scrapperResultId: model.scrapperResultId,
                 options: NotificationModel.stringifiedOptions(model.options),
+            },
+            android:{
+                "priority":"high"
             },
             topic: FirebaseNotificationSenderService.topic
         };
