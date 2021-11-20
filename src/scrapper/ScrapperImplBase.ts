@@ -1,4 +1,4 @@
-import { IResultReadService } from "../results/IResultReadService";
+import { IResultReadService } from "./services/IResultReadService";
 import { IEmailService } from "../emailSend/IEmailService";
 import { NotificationModel } from "../notifications/models/NotificationModel";
 import { INotificationsFacade } from "../notifications/NotificationsFacade";

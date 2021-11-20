@@ -7,14 +7,13 @@ export type ScrapperRunStatus =
     | "finished"
     | "failed"
 
-export type RunConfigurationId = string;
 
 export class ScrapperResult{
     
     public readonly id: ScrapperResultId;
     public readonly implId: ScrapperImplId;
     public readonly dateCreated: Date;
-    public readonly runConfigurationId: RunConfigurationId;
+    public readonly labels?: any;
 
     private _outputDirectory: string | null = null;
     private _dateFinished: Date | null = null;
@@ -22,14 +21,14 @@ export class ScrapperResult{
     private _resultData : any | null = null;
 
     constructor(
-        impl: ScrapperImplBase, runConfigurationId: RunConfigurationId
+        impl: ScrapperImplBase, labels?: any
     ){
         const now = new Date();
         this.id = `${impl.id}_${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}`;
         this.dateCreated = now;
         this.implId = impl.id;
-        this.runConfigurationId = runConfigurationId;
         this._status = "running";
+        this.labels = labels;
     }
 
     public get resultData() : any | null {

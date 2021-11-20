@@ -1,7 +1,7 @@
 import { ScrapperDescriptor } from "../src/scrapper/models/ScrapperDescriptor";
 import * as path from "path";
 import * as fs from "fs";
-import { admin } from "../src/firebase";
+import { admin } from "../src/firebaseServices/firebase";
 
 
 export class FirebaseStorageScrapperImplDownloader {

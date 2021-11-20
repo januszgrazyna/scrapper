@@ -1,6 +1,6 @@
-import { ScrapperResult } from "../../scrapper/models/ScrapperResult";
-import { IResultReadService } from "../IResultReadService";
-import { admin } from "../../firebase";
+import { ScrapperResult } from "../scrapper/models/ScrapperResult";
+import { IResultReadService } from "../scrapper/services/IResultReadService";
+import { admin } from "./firebase";
 
 export class FirebaseResultReadService implements IResultReadService {
 

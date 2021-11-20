@@ -1,6 +1,8 @@
 import {debug} from "./environment";
+import { logger } from "./Logging";
 
-export function sleep(time: number): Promise<void> {
+export function sleep(time: number, reason: string): Promise<void> {
+    logger.debug(`Sleeping ${time}ms for reason: ${reason}`)
     if(debug){
         return Promise.resolve();
     }
@@ -9,27 +11,11 @@ export function sleep(time: number): Promise<void> {
     })
 }
 
-export function trimBackingFieldNames(obj: any): any{
-    const result: any = {}
-    for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            let resultKey = key;
-            if(resultKey.includes("_")){
-                resultKey = key.replace("_", "")
-            }
-            result[resultKey] = obj[key]
-        }
+export function sleepNoLog(time: number): Promise<void> {
+    if(debug){
+        return Promise.resolve();
     }
-    return result
-}
-
-export function setDateFieldsToJsonStr(obj:any) {
-    for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            if(obj[key] instanceof Date){
-                obj[key] = (obj[key] as Date).toJSON()
-            }
-        }
-    }
-    return obj
+    return new Promise((resolve, _) => {
+        setTimeout(() => resolve(), time)
+    })
 }

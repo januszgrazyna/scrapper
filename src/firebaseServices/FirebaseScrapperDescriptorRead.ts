@@ -1,6 +1,6 @@
-import { IScrapperDescriptorRead } from "./IScrapperDescriptorRead";
-import { ScrapperDescriptor } from "./models/ScrapperDescriptor";
-import { admin } from "../firebase";
+import { IScrapperDescriptorRead } from "../scrapper/services/IScrapperDescriptorRead";
+import { ScrapperDescriptor } from "../scrapper/models/ScrapperDescriptor";
+import { admin } from "./firebase";
 
 export class FirebaseScrapperDescriptorRead implements IScrapperDescriptorRead {
     constructor(private collectionName: string){
