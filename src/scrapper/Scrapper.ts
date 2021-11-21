@@ -11,11 +11,13 @@ import { ScrapperDescriptor } from './models/ScrapperDescriptor';
 import { MitmProxyRunner } from './mitmProxyRunner';
 import { IResultUploadService } from '../scrapper/services/IResultUploadService';
 import { debug } from '../environment';
+import { HumanActionRunner } from './HumanActionRunner';
 
 
 export default class Scrapper {
     private outputDir?: string;
     private scrapperImplLoader = new LocalScrapperImplLoader();
+    private humanActionRunner = new HumanActionRunner();
 
     constructor(
         private resultUploadService: IResultUploadService,
@@ -82,6 +84,27 @@ export default class Scrapper {
         scrapperResult.setFinished()
         logger.info('Scrapper succesfully finished')
       } catch (error) {
+        if(options.useHumanAction && error instanceof HumanActionError){
+          logger.debug('Running human action repair');
+          try{
+            await this.humanActionRunner.tryRepair(() => 
+              impl.start({notificationsFacade: CompositionRoot.notificationsFacade, emailService: CompositionRoot.emailService, resultReadService: CompositionRoot.resultReadService}, scrapperResult, argv), 
+              () => {
+                logger.debug('REPAIR ACTION');
+                return Promise.resolve();
+              },
+              argv)
+            scrapperResult.setFinished()
+            await this.updateResultsAndSendOutputs(scrapperResult);
+            return scrapperResult;
+          }
+          catch(error){
+            logger.info(`Could not repair through human action`)
+            logger.debug(`${error}`)
+          }
+        }
+
+
         // @ts-ignore
         logger.error(`Error raised while running scrapper ${impl.id}: ${error}`)
         // @ts-ignore

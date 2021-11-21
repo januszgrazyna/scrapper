@@ -8,6 +8,7 @@ export class ClientOptions {
     headless: boolean = DEFAULT_headless;
     useMitmProxy: boolean = DEFAULT_useMitmProxy;
     mitmProxyRemoveResult: boolean = DEFAULT_mitmProxyRemoveResult;
+    useHumanAction: boolean = false;
 
     constructor(public type: string,
         public labels?: any) { }
